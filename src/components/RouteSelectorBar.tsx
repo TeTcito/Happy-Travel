@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { 
   ArrowRight, 
   Car,
   MapPin
 } from 'lucide-react';
-import { RouteMapModal, type RouteSelectionData } from './RouteMapModal';
+import type { RouteSelectionData } from './RouteMapModal';
+
+const RouteMapModal = lazy(() => import('./RouteMapModal').then(m => ({ default: m.RouteMapModal })));
 
 interface RouteSelectorBarProps {
   onOpenQuote: (serviceType?: string, origin?: string, destination?: string) => void;
@@ -186,14 +188,18 @@ export const RouteSelectorBar: React.FC<RouteSelectorBarProps> = ({ onOpenQuote 
       </div>
 
       {/* Ventana Emergente del Mapa (Fondo Blanco Puro y Bloques Acordes) */}
-      <RouteMapModal
-        isOpen={isMapOpen}
-        onClose={() => setIsMapOpen(false)}
-        onConfirmRoute={handleRouteConfirmed}
-        initialOrigin={origin}
-        initialDestination={destination}
-        initialStep={mapStep}
-      />
+      {isMapOpen && (
+        <Suspense fallback={null}>
+          <RouteMapModal
+            isOpen={isMapOpen}
+            onClose={() => setIsMapOpen(false)}
+            onConfirmRoute={handleRouteConfirmed}
+            initialOrigin={origin}
+            initialDestination={destination}
+            initialStep={mapStep}
+          />
+        </Suspense>
+      )}
     </div>
   );
 };

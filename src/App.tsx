@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import type { TabType } from './types';
-import { DesktopView, MobileView } from './views';
-import { QuoteModal } from './components/QuoteModal';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
+
+const MobileView = lazy(() => import('./views/mobile/MobileView'));
+const DesktopView = lazy(() => import('./views/desktop/DesktopView'));
+const QuoteModal = lazy(() => import('./components/QuoteModal').then(m => ({ default: m.QuoteModal })));
 
 export function App() {
   const [activeTab, setActiveTab] = useState<TabType>('inicio');
@@ -54,29 +56,35 @@ export function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-800 font-sans selection:bg-brand-yellow selection:text-black">
-      {/* Vistas Independientes: src/views/desktop (>=1024px) y src/views/mobile (<1024px) */}
-      {isMobile ? (
-        <MobileView 
-          activeTab={activeTab} 
-          setActiveTab={handleTabChange} 
-          onOpenQuote={handleOpenQuote} 
-        />
-      ) : (
-        <DesktopView 
-          activeTab={activeTab} 
-          setActiveTab={handleTabChange} 
-          onOpenQuote={handleOpenQuote} 
-        />
-      )}
+      {/* Vistas Independientes Lazy Loaded: Desktop (>=1024px) y Mobile (<1024px) */}
+      <Suspense fallback={<div className="min-h-screen bg-white" />}>
+        {isMobile ? (
+          <MobileView 
+            activeTab={activeTab} 
+            setActiveTab={handleTabChange} 
+            onOpenQuote={handleOpenQuote} 
+          />
+        ) : (
+          <DesktopView 
+            activeTab={activeTab} 
+            setActiveTab={handleTabChange} 
+            onOpenQuote={handleOpenQuote} 
+          />
+        )}
+      </Suspense>
 
       {/* Modales e Interacciones Globales */}
-      <QuoteModal 
-        isOpen={isQuoteOpen} 
-        onClose={() => setIsQuoteOpen(false)} 
-        defaultService={quoteService} 
-        defaultOrigin={quoteOrigin}
-        defaultDestination={quoteDestination}
-      />
+      {isQuoteOpen && (
+        <Suspense fallback={null}>
+          <QuoteModal 
+            isOpen={isQuoteOpen} 
+            onClose={() => setIsQuoteOpen(false)} 
+            defaultService={quoteService} 
+            defaultOrigin={quoteOrigin}
+            defaultDestination={quoteDestination}
+          />
+        </Suspense>
+      )}
 
       <WhatsAppFloatingButton />
     </div>

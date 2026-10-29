@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import type { TabType } from '../../types';
 import { MobileBottomNav } from './MobileBottomNav';
 import { HomeTab } from './tabs/HomeTab';
-import { ServicesTab } from './tabs/ServicesTab';
-import { ParcelsTab } from './tabs/ParcelsTab';
-import { PetsTab } from './tabs/PetsTab';
-import { ContactTab } from './tabs/ContactTab';
+
+const ServicesTab = lazy(() => import('./tabs/ServicesTab').then(m => ({ default: m.ServicesTab })));
+const ParcelsTab = lazy(() => import('./tabs/ParcelsTab').then(m => ({ default: m.ParcelsTab })));
+const PetsTab = lazy(() => import('./tabs/PetsTab').then(m => ({ default: m.PetsTab })));
+const ContactTab = lazy(() => import('./tabs/ContactTab').then(m => ({ default: m.ContactTab })));
 
 export interface MobileViewProps {
   activeTab: TabType;
@@ -29,29 +30,31 @@ export const MobileView: React.FC<MobileViewProps> = ({
           />
         )}
 
-        {activeTab === 'servicios' && (
-          <ServicesTab 
-            onOpenQuote={onOpenQuote} 
-          />
-        )}
+        <Suspense fallback={<div className="min-h-screen bg-white" />}>
+          {activeTab === 'servicios' && (
+            <ServicesTab 
+              onOpenQuote={onOpenQuote} 
+            />
+          )}
 
-        {activeTab === 'encomiendas' && (
-          <ParcelsTab 
-            onOpenQuote={onOpenQuote} 
-          />
-        )}
+          {activeTab === 'encomiendas' && (
+            <ParcelsTab 
+              onOpenQuote={onOpenQuote} 
+            />
+          )}
 
-        {activeTab === 'mascotas' && (
-          <PetsTab 
-            onOpenQuote={onOpenQuote} 
-          />
-        )}
+          {activeTab === 'mascotas' && (
+            <PetsTab 
+              onOpenQuote={onOpenQuote} 
+            />
+          )}
 
-        {activeTab === 'contactanos' && (
-          <ContactTab 
-            onOpenQuote={onOpenQuote} 
-          />
-        )}
+          {activeTab === 'contactanos' && (
+            <ContactTab 
+              onOpenQuote={onOpenQuote} 
+            />
+          )}
+        </Suspense>
       </main>
 
       {/* Barra de Navegación Inferior Flotante Móvil con Scoop y Física de Resorte */}

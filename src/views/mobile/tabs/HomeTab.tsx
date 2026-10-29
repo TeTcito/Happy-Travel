@@ -28,7 +28,7 @@ const serviceCards = [
     id: 'encomiendas',
     title: 'Encomiendas Express',
     subtitle: 'Cero pérdidas, entrega en mano y reporte en tiempo real',
-    image: '/parcels/parcel-executive-van-road.jpg',
+    image: '/parcels/parcel-executive-van-road.webp',
     tab: 'encomiendas' as TabType,
     quoteName: 'Encomiendas Express Puerta a Puerta',
   },
@@ -36,7 +36,7 @@ const serviceCards = [
     id: 'puerta-a-puerta',
     title: 'Transporte Puerta a Puerta',
     subtitle: 'Rutas intermunicipales sin escalas ni compartir vehículo',
-    image: '/services/door-to-door-chauffeur.jpg',
+    image: '/services/door-to-door-chauffeur.webp',
     tab: 'servicios' as TabType,
     quoteName: 'Transporte Puerta a Puerta Privado',
   },
@@ -250,7 +250,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({ setActiveTab, onOpenQuote }) =
       tag: 'Surf & Playas del Pacífico',
       iconicHighlight: 'Olas de Clase Mundial & Atardeceres Dorados',
       description: 'El paraíso de costa preferido por viajeros de todo el mundo: olas perfectas para surfear, atardeceres mágicos frente al mar, deliciosa comida típica y un ambiente bohemio incomparable.',
-      image: '/destinations/montanita-pacific-sunset.jpg',
+      image: '/destinations/montanita-pacific-sunset.webp',
     },
     {
       name: 'Cotopaxi',
@@ -258,7 +258,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({ setActiveTab, onOpenQuote }) =
       tag: 'Santuario de los Andes',
       iconicHighlight: 'Parque Nacional & Volcán Nevado',
       description: 'Contempla la imponente cumbre nevada de uno de los volcanes activos más altos del mundo, rodeado de senderos en páramo andino virgen, la mística laguna de Limpiopungo y aire puro de montaña.',
-      image: '/destinations/cotopaxi-volcano.jpg',
+      image: '/destinations/cotopaxi-volcano.webp',
     },
     {
       name: 'Manta',
@@ -266,7 +266,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({ setActiveTab, onOpenQuote }) =
       tag: 'Sol, Océano & Gastronomía',
       iconicHighlight: 'Playa El Murciélago & Puerto Atunero',
       description: 'La gran capital turística y pesquera de la costa: extensas playas de arena dorada, deportes náuticos de primer nivel y los más exquisitos ceviches y manjares marinos manabitas.',
-      image: '/destinations/manta-skyline-coastal.jpg',
+      image: '/destinations/manta-skyline-coastal.webp',
     },
     {
       name: 'Otavalo',
@@ -311,8 +311,10 @@ export const HomeTab: React.FC<HomeTabProps> = ({ setActiveTab, onOpenQuote }) =
         {/* CONTENEDOR DE LA IMAGEN EN PROPORCIÓN HORIZONTAL (3:2) */}
         <div className="relative w-full aspect-[3/2] overflow-hidden bg-[#070b14]">
           <img 
-            src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=2400&q=90" 
+            src="/hero-suv.webp" 
             alt="Vehículo SUV en carretera al atardecer"
+            fetchPriority="high"
+            decoding="async"
             className="w-full h-full object-cover object-[75%_center] block"
           />
           
@@ -420,6 +422,8 @@ export const HomeTab: React.FC<HomeTabProps> = ({ setActiveTab, onOpenQuote }) =
                     <img
                       src={card.image}
                       alt={card.title}
+                      loading="lazy"
+                      decoding="async"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     
@@ -583,6 +587,8 @@ export const HomeTab: React.FC<HomeTabProps> = ({ setActiveTab, onOpenQuote }) =
                 <img
                   src={dest.image}
                   alt={dest.name}
+                  loading="lazy"
+                  decoding="async"
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
@@ -724,6 +730,8 @@ export const HomeTab: React.FC<HomeTabProps> = ({ setActiveTab, onOpenQuote }) =
                   <img
                     src={item.avatar}
                     alt={item.name}
+                    loading="lazy"
+                    decoding="async"
                     className="w-5 h-5 rounded-full object-cover border border-amber-300 shrink-0"
                   />
                   <span className="text-[9px] font-bold text-slate-900 truncate">
@@ -769,6 +777,8 @@ export const HomeTab: React.FC<HomeTabProps> = ({ setActiveTab, onOpenQuote }) =
                     <img
                       src={car.image}
                       alt={car.name}
+                      loading="lazy"
+                      decoding="async"
                       className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-xs"
                     />
                   </div>
@@ -830,7 +840,7 @@ export const HomeTab: React.FC<HomeTabProps> = ({ setActiveTab, onOpenQuote }) =
           {/* Marca de esquina inferior derecha por encima de la barra */}
           <ScrollReveal direction="left" distance={20} duration={700} delay={380} className="absolute bottom-16 right-3 z-10">
             <div className="bg-black/85 border border-white/20 px-3 py-1 rounded-lg flex items-center gap-1.5 shadow-lg backdrop-blur-sm">
-              <img src="/logo-transparent.png" alt="Happy Travel" className="h-4 w-auto object-contain" />
+              <img src="/logo-transparent.png" alt="Happy Travel" loading="lazy" decoding="async" className="h-4 w-auto object-contain" />
               <span className="text-[9px] font-bold text-white tracking-wider">HAPPY TRAVEL</span>
             </div>
           </ScrollReveal>
