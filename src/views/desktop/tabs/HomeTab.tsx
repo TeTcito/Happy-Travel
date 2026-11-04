@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { TabType } from '../../../types';
 import { ScrollReveal } from '../../../components/ScrollReveal';
+import { useCMS } from '../../../context/CMSContext';
 import { 
   Clock, 
   MapPin, 
@@ -146,7 +147,9 @@ export const HomeTab: React.FC<HomeTabProps> = ({ setActiveTab, onOpenQuote }) =
     setActiveCardIndex((prev) => (prev + 1) % serviceCards.length);
   };
 
-  const popularDestinations = [
+  const { popularDestinations: cmsPopularDestinations } = useCMS();
+
+  const defaultPopularDestinations = [
     {
       name: 'Quito',
       province: 'Pichincha',
@@ -212,6 +215,10 @@ export const HomeTab: React.FC<HomeTabProps> = ({ setActiveTab, onOpenQuote }) =
       image: 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=800&q=80',
     },
   ];
+
+  const popularDestinations = cmsPopularDestinations && cmsPopularDestinations.length > 0
+    ? cmsPopularDestinations
+    : defaultPopularDestinations;
 
   const testimonials = [
     {

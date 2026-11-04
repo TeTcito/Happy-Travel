@@ -1,12 +1,20 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { CMSProvider } from './context/CMSContext';
 import type { TabType } from './types';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
+import { AdminProtectedRoute } from './components/admin/AdminProtectedRoute';
 
 const MobileView = lazy(() => import('./views/mobile/MobileView'));
 const DesktopView = lazy(() => import('./views/desktop/DesktopView'));
 const QuoteModal = lazy(() => import('./components/QuoteModal').then(m => ({ default: m.QuoteModal })));
 
-export function App() {
+// Admin Lazy Loaded para conservar la máxima velocidad y puntuación de PageSpeed
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin').then(m => ({ default: m.AdminLogin })));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
+
+const MainPublicSite: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('inicio');
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [quoteService, setQuoteService] = useState('Transporte Puerta a Puerta Privado');
@@ -88,6 +96,77 @@ export function App() {
 
       <WhatsAppFloatingButton />
     </div>
+  );
+};
+
+const AppShell: React.FC = () => {
+  const location = useLocation();
+
+  // Si alguien entra con hash #admin o #/admin, redirigir al pathname
+  useEffect(() => {
+    if (window.location.hash === '#admin' || window.location.hash === '#/admin') {
+      window.location.href = '/admin';
+    }
+  }, [location]);
+
+  return (
+    <Routes>
+      {/* ==========================================================
+          PORTAL ADMINISTRATIVO INDEPENDIENTE (HAPPY TRAVEL)
+         ========================================================== */}
+      <Route
+        path="/admin/login"
+        element={
+          <Suspense fallback={<div className="min-h-screen bg-[#080A0E]" />}>
+            <AdminLogin />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/portal-admin/login"
+        element={
+          <Suspense fallback={<div className="min-h-screen bg-[#080A0E]" />}>
+            <AdminLogin />
+          </Suspense>
+        }
+      />
+
+      <Route element={<AdminProtectedRoute />}>
+        <Route
+          path="/admin"
+          element={
+            <Suspense fallback={<div className="min-h-screen bg-[#080A0E]" />}>
+              <AdminDashboard />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/portal-admin"
+          element={
+            <Suspense fallback={<div className="min-h-screen bg-[#080A0E]" />}>
+              <AdminDashboard />
+            </Suspense>
+          }
+        />
+      </Route>
+
+      {/* ==========================================================
+          SITIO WEB PRINCIPAL (PÁGINA PÚBLICA)
+         ========================================================== */}
+      <Route path="*" element={<MainPublicSite />} />
+    </Routes>
+  );
+};
+
+export function App() {
+  return (
+    <AuthProvider>
+      <CMSProvider>
+        <BrowserRouter>
+          <AppShell />
+        </BrowserRouter>
+      </CMSProvider>
+    </AuthProvider>
   );
 }
 

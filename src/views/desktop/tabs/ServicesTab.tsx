@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { ScrollReveal } from '../../../components/ScrollReveal';
+import { useCMS } from '../../../context/CMSContext';
 import { 
   Car, 
   ArrowRight, 
@@ -51,7 +52,9 @@ export const ServicesTab: React.FC<ServicesTabProps> = ({ onOpenQuote }) => {
     }
   };
 
-  const featuredClientRoutes = [
+  const { popularRoutes: cmsRoutes, fleetClasses: cmsFleet } = useCMS();
+
+  const defaultFeaturedRoutes = [
     {
       id: 'quito-guayaquil',
       title: 'Quito — Guayaquil',
@@ -119,6 +122,10 @@ export const ServicesTab: React.FC<ServicesTabProps> = ({ onOpenQuote }) => {
       image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Laguna_Cuicocha_seen_from_the_visitor_center_02.jpg/1280px-Laguna_Cuicocha_seen_from_the_visitor_center_02.jpg',
     },
   ];
+
+  const featuredClientRoutes = cmsRoutes && cmsRoutes.length > 0
+    ? cmsRoutes
+    : defaultFeaturedRoutes;
 
   const whyTravelPillars = [
     {
@@ -691,97 +698,41 @@ export const ServicesTab: React.FC<ServicesTabProps> = ({ onOpenQuote }) => {
           ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8 sm:my-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
-          {/* Card 1: Clase Ejecutiva (Entrada desde la izquierda) */}
-          <ScrollReveal direction="left" distance={30} delay={60}>
-            <div
-              onClick={() => {
-                setResVehicleType('Clase Ejecutiva');
-                const formEl = document.getElementById('reservation-form-section');
-                if (formEl) formEl.scrollIntoView({ behavior: 'smooth' });
-                else onOpenQuote('Clase Ejecutiva');
-              }}
-              className="bg-white border border-slate-200/90 hover:border-amber-500/50 rounded-[14px] p-6 sm:p-7 shadow-clean-sm hover:shadow-clean-lg transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden"
-            >
-              <div>
-                <h3 className="font-sans font-bold text-slate-900 text-xl tracking-tight group-hover:text-amber-800 transition-colors">
-                  Clase Ejecutiva
-                </h3>
-                <p className="text-xs sm:text-[13px] text-slate-500 mt-1 font-normal">
-                  Para ejecutivos
-                </p>
-              </div>
+          {(cmsFleet && cmsFleet.length > 0 ? cmsFleet : [
+            { id: '1', title: 'Clase Ejecutiva', subtitle: 'Para ejecutivos', image: '/fleet/class_business.jpg', imagePosition: '50% 50%' },
+            { id: '2', title: 'Clase Premium', subtitle: 'Para su comodidad', image: '/fleet/class_premium.jpg', imagePosition: '50% 50%' },
+            { id: '3', title: 'Clase de Lujo', subtitle: 'Para la máxima experiencia', image: '/fleet/class_luxury.jpg', imagePosition: '50% 50%' },
+          ]).map((fleet, idx) => (
+            <ScrollReveal key={fleet.id || idx} direction={idx === 0 ? 'left' : idx === 1 ? 'up' : 'right'} distance={30} delay={60 + idx * 60}>
+              <div
+                onClick={() => {
+                  setResVehicleType(fleet.title);
+                  const formEl = document.getElementById('reservation-form-section');
+                  if (formEl) formEl.scrollIntoView({ behavior: 'smooth' });
+                  else onOpenQuote(fleet.title);
+                }}
+                className="bg-white border border-slate-200/90 hover:border-amber-500/50 rounded-[14px] p-6 sm:p-7 shadow-clean-sm hover:shadow-clean-lg transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden"
+              >
+                <div>
+                  <h3 className="font-sans font-bold text-slate-900 text-xl tracking-tight group-hover:text-amber-800 transition-colors">
+                    {fleet.title}
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-slate-500 mt-1 font-normal">
+                    {fleet.subtitle}
+                  </p>
+                </div>
 
-              <div className="mt-4 -mx-7 -mb-7 overflow-hidden">
-                <img
-                  src="/fleet/class_business.jpg"
-                  alt="Clase Ejecutiva - Sedán Ejecutivo"
-                  className="w-full h-auto object-contain object-left block transform group-hover:scale-105 transition-transform duration-500"
-                />
+                <div className="mt-4 -mx-7 -mb-7 overflow-hidden">
+                  <img
+                    src={fleet.image}
+                    alt={fleet.title}
+                    style={{ objectPosition: fleet.imagePosition || '50% 50%' }}
+                    className="w-full h-auto object-contain object-left block transform group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
               </div>
-            </div>
-          </ScrollReveal>
-
-          {/* Card 2: Clase Premium (Entrada desde abajo) */}
-          <ScrollReveal direction="up" distance={30} delay={120}>
-            <div
-              onClick={() => {
-                setResVehicleType('Clase Premium');
-                const formEl = document.getElementById('reservation-form-section');
-                if (formEl) formEl.scrollIntoView({ behavior: 'smooth' });
-                else onOpenQuote('Clase Premium');
-              }}
-              className="bg-white border border-slate-200/90 hover:border-amber-500/50 rounded-[14px] p-6 sm:p-7 shadow-clean-sm hover:shadow-clean-lg transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden"
-            >
-              <div>
-                <h3 className="font-sans font-bold text-slate-900 text-xl tracking-tight group-hover:text-amber-800 transition-colors">
-                  Clase Premium
-                </h3>
-                <p className="text-xs sm:text-[13px] text-slate-500 mt-1 font-normal">
-                  Para su comodidad
-                </p>
-              </div>
-
-              <div className="mt-4 -mx-7 -mb-7 overflow-hidden">
-                <img
-                  src="/fleet/class_premium.jpg"
-                  alt="Clase Premium - Crossover Confort"
-                  className="w-full h-auto object-contain object-left block transform group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-            </div>
-          </ScrollReveal>
-
-          {/* Card 3: Clase de Lujo (Entrada desde la derecha) */}
-          <ScrollReveal direction="right" distance={30} delay={180}>
-            <div
-              onClick={() => {
-                setResVehicleType('Clase de Lujo');
-                const formEl = document.getElementById('reservation-form-section');
-                if (formEl) formEl.scrollIntoView({ behavior: 'smooth' });
-                else onOpenQuote('Clase de Lujo');
-              }}
-              className="bg-white border border-slate-200/90 hover:border-amber-500/50 rounded-[14px] p-6 sm:p-7 shadow-clean-sm hover:shadow-clean-lg transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden"
-            >
-              <div>
-                <h3 className="font-sans font-bold text-slate-900 text-xl tracking-tight group-hover:text-amber-800 transition-colors">
-                  Clase de Lujo
-                </h3>
-                <p className="text-xs sm:text-[13px] text-slate-500 mt-1 font-normal">
-                  Para la máxima experiencia
-                </p>
-              </div>
-
-              <div className="mt-4 -mx-7 -mb-7 overflow-hidden">
-                <img
-                  src="/fleet/class_luxury.jpg"
-                  alt="Clase de Lujo - Limusina Flagship VIP"
-                  className="w-full h-auto object-contain object-left block transform group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-            </div>
-          </ScrollReveal>
-
+            </ScrollReveal>
+          ))}
         </div>
       </section>
 

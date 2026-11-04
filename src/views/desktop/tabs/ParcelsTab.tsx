@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { COMPANY_INFO } from '../../../data/mockData';
 import { ScrollReveal } from '../../../components/ScrollReveal';
+import { useCMS } from '../../../context/CMSContext';
 import { 
   ArrowRight,
   ArrowLeft,
@@ -30,7 +31,9 @@ export const ParcelsTab: React.FC<ParcelsTabProps> = ({ onOpenQuote }) => {
     }
   };
 
-  const servicesData = [
+  const { parcelServices: cmsParcelServices } = useCMS();
+
+  const defaultServicesData = [
     {
       id: 'encomienda-mismo-viaje',
       title: 'Encomiendas en tu Mismo Viaje',
@@ -64,6 +67,10 @@ export const ParcelsTab: React.FC<ParcelsTabProps> = ({ onOpenQuote }) => {
       tag: 'Entrega el Mismo Día'
     }
   ];
+
+  const servicesData = cmsParcelServices && cmsParcelServices.length > 0
+    ? cmsParcelServices
+    : defaultServicesData;
 
   return (
     <div className="bg-white text-slate-800">

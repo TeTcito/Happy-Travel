@@ -14,6 +14,9 @@ export default defineConfig({
           if (id.includes('node_modules/leaflet')) {
             return 'leaflet-maps';
           }
+          if (id.includes('node_modules/@supabase')) {
+            return 'supabase-vendor';
+          }
         }
       }
     }

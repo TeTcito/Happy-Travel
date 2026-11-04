@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { ScrollReveal } from '../../../components/ScrollReveal';
+import { useCMS } from '../../../context/CMSContext';
 import { 
   ArrowRight, 
   ArrowLeft,
@@ -23,7 +24,7 @@ interface ServicesTabProps {
   onOpenQuote: (serviceType?: string, origin?: string, destination?: string) => void;
 }
 
-const featuredClientRoutes = [
+const defaultFeaturedRoutes = [
   {
     id: 'quito-guayaquil',
     title: 'Quito — Guayaquil',
@@ -92,7 +93,7 @@ const featuredClientRoutes = [
   },
 ];
 
-const visitedDestinations = [
+const defaultVisitedDestinations = [
   {
     name: 'Quito',
     province: 'Pichincha',
@@ -162,7 +163,7 @@ const statsMetrics = [
   { value: '19+', label: 'Años Experiencia' },
 ];
 
-const fleetClasses = [
+const defaultFleetClasses = [
   {
     id: 'business',
     title: 'Clase Ejecutiva',
@@ -184,6 +185,16 @@ const fleetClasses = [
 ];
 
 export const ServicesTab: React.FC<ServicesTabProps> = ({ onOpenQuote }) => {
+  const {
+    popularRoutes: cmsPopularRoutes,
+    visitedDestinations: cmsVisitedDestinations,
+    fleetClasses: cmsFleetClasses,
+  } = useCMS();
+
+  const featuredClientRoutes = cmsPopularRoutes && cmsPopularRoutes.length > 0 ? cmsPopularRoutes : defaultFeaturedRoutes;
+  const visitedDestinations = cmsVisitedDestinations && cmsVisitedDestinations.length > 0 ? cmsVisitedDestinations : defaultVisitedDestinations;
+  const fleetClasses = cmsFleetClasses && cmsFleetClasses.length > 0 ? cmsFleetClasses : defaultFleetClasses;
+
   const popularRoutesScrollRef = useRef<HTMLDivElement>(null);
   const visitedDestinationsScrollRef = useRef<HTMLDivElement>(null);
   const [showReservationModal, setShowReservationModal] = useState(false);
