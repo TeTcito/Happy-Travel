@@ -12,7 +12,7 @@ import {
   fetchModulesFromSupabase,
 } from '../lib/supabase';
 
-const STORAGE_KEY = 'happy_travel_cms_modules_v2';
+const STORAGE_KEY = 'happy_travel_cms_modules_v3';
 
 export const DEFAULT_POPULAR_DESTINATIONS: PopularDestinationItem[] = [
   {
@@ -47,8 +47,7 @@ export const DEFAULT_POPULAR_DESTINATIONS: PopularDestinationItem[] = [
     iconicHighlight: 'Catedral de la Inmaculada & Calle Larga',
     description:
       'Camina entre calles adoquinadas, cúpulas celestes y orillas floridas junto al río Tomebamba. Descubre talleres tradicionales de sombreros de paja toquilla y arquitectura republicana sin igual.',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Catedral_de_la_Inmaculada_Concepci%C3%B3n%2C_Cuenca_03.jpg/1280px-Catedral_de_la_Inmaculada_Concepci%C3%B3n%2C_Cuenca_03.jpg',
+    image: '/destinations/cuenca-catedral.webp',
     mediaType: 'image',
   },
   {
@@ -110,8 +109,7 @@ export const DEFAULT_POPULAR_ROUTES: PopularRouteItem[] = [
     vehicleType: 'Confort Ejecutivo A/C',
     included: '100% Puerta a Puerta',
     price: 'Desde $120',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Catedral_de_la_Inmaculada_Concepci%C3%B3n%2C_Cuenca_03.jpg/1280px-Catedral_de_la_Inmaculada_Concepci%C3%B3n%2C_Cuenca_03.jpg',
+    image: '/destinations/cuenca-catedral.webp',
     mediaType: 'image',
   },
   {
@@ -160,8 +158,7 @@ export const DEFAULT_POPULAR_ROUTES: PopularRouteItem[] = [
     vehicleType: 'Sedán / Camioneta VIP',
     included: 'Monitoreo Satelital GPS',
     price: 'Desde $95',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Catedral_de_la_Inmaculada_Concepci%C3%B3n%2C_Cuenca.jpg/1280px-Catedral_de_la_Inmaculada_Concepci%C3%B3n%2C_Cuenca.jpg',
+    image: '/destinations/cuenca-catedral.webp',
     mediaType: 'image',
   },
 ];
@@ -181,8 +178,7 @@ export const DEFAULT_VISITED_DESTINATIONS: VisitedDestinationItem[] = [
     name: 'Cuenca',
     province: 'Azuay • Patrimonio Cultural',
     description: 'Atenas del Ecuador con sus cúpulas celestes y río Tomebamba',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Catedral_de_la_Inmaculada_Concepci%C3%B3n%2C_Cuenca.jpg/1280px-Catedral_de_la_Inmaculada_Concepci%C3%B3n%2C_Cuenca.jpg',
+    image: '/destinations/cuenca-catedral.webp',
     mediaType: 'image',
   },
   {
