@@ -1,17 +1,23 @@
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL =
-  import.meta.env.VITE_SUPABASE_URL || 'https://pezajodvvouezumnppaj.supabase.co';
-const SUPABASE_ANON_KEY =
-  import.meta.env.VITE_SUPABASE_ANON_KEY ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlemFqb2R2dm91ZXp1bW5wcGFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzMDA4ODEsImV4cCI6MjEwODg3Njg4MX0.LsQfzxKPk576WIWrNQ9UnILIXCm0a-LeIGFq_r0mDb0';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+export const isSupabaseConfigured = Boolean(
+  SUPABASE_URL && SUPABASE_ANON_KEY && SUPABASE_URL.startsWith('http')
+);
+
+export const supabase = isSupabaseConfigured
+  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : createClient('https://placeholder.supabase.co', 'placeholder-anon-key');
 
 // ============================================================================
 // 1. CMS MODULES (CARRUSELES Y SECCIONES DEL PANEL ADMINISTRATIVO)
 // ============================================================================
 export async function saveModulesToSupabase(modulesData: any): Promise<boolean> {
+  if (!isSupabaseConfigured) {
+    return false;
+  }
   try {
     const { error } = await supabase.from('site_config').upsert([
       {
@@ -33,6 +39,9 @@ export async function saveModulesToSupabase(modulesData: any): Promise<boolean> 
 }
 
 export async function fetchModulesFromSupabase(): Promise<any | null> {
+  if (!isSupabaseConfigured) {
+    return null;
+  }
   try {
     const { data, error } = await supabase
       .from('site_config')
@@ -55,6 +64,9 @@ export async function uploadMediaToSupabase(
   file: File,
   prefix = 'media'
 ): Promise<string | null> {
+  if (!isSupabaseConfigured) {
+    return null;
+  }
   try {
     const ext = file.name.split('.').pop()?.toLowerCase() || 'webp';
     const safeName = file.name
@@ -114,6 +126,19 @@ export async function checkDatabaseSync(): Promise<{
     { name: 'fleet_classes', label: 'Flota y Clases (fleet_classes)' },
     { name: 'parcel_services', label: 'Servicios Encomienda (parcel_services)' },
   ];
+
+  if (!isSupabaseConfigured) {
+    return {
+      connected: false,
+      url: 'Pendiente de Configurar en .env',
+      tables: tableList.map((t) => ({
+        name: t.name,
+        label: t.label,
+        status: 'pending',
+        count: 0,
+      })),
+    };
+  }
 
   try {
     const results: TableSyncStatus[] = [];

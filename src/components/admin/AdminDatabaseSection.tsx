@@ -12,7 +12,12 @@ import {
   ArrowUpRight,
   Sparkles,
 } from 'lucide-react';
-import { checkDatabaseSync, type TableSyncStatus, saveModulesToSupabase } from '../../lib/supabase';
+import {
+  checkDatabaseSync,
+  type TableSyncStatus,
+  saveModulesToSupabase,
+  isSupabaseConfigured,
+} from '../../lib/supabase';
 import { useCMS } from '../../context/CMSContext';
 
 export const AdminDatabaseSection: React.FC = () => {
@@ -27,23 +32,23 @@ export const AdminDatabaseSection: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [lastSyncTime, setLastSyncTime] = useState<string>('Sincronizado hace un momento');
+  const [lastSyncTime, setLastSyncTime] = useState<string>('Esperando vinculación');
   const [connectionInfo, setConnectionInfo] = useState<{
     connected: boolean;
     url: string;
     tables: TableSyncStatus[];
   }>({
-    connected: true,
-    url: 'https://pezajodvvouezumnppaj.supabase.co',
+    connected: isSupabaseConfigured,
+    url: isSupabaseConfigured ? 'https://[tu-proyecto].supabase.co' : 'Sin vincular',
     tables: [
-      { name: 'site_config', label: 'Configuración CMS (site_config)', status: 'synced', count: 3 },
-      { name: 'popular_destinations', label: 'Destinos Populares (popular_destinations)', status: 'synced', count: 6 },
-      { name: 'popular_routes', label: 'Rutas Populares (popular_routes)', status: 'synced', count: 6 },
-      { name: 'visited_destinations', label: 'Destinos Visitados (visited_destinations)', status: 'synced', count: 4 },
-      { name: 'fleet_classes', label: 'Flota y Clases (fleet_classes)', status: 'synced', count: 3 },
-      { name: 'parcel_services', label: 'Servicios Encomienda (parcel_services)', status: 'synced', count: 4 },
-      { name: 'leads', label: 'Cotizaciones y Reservas (leads)', status: 'synced', count: 0 },
-      { name: 'contact_messages', label: 'Mensajes de Contacto (contact_messages)', status: 'synced', count: 0 },
+      { name: 'site_config', label: 'Configuración CMS (site_config)', status: 'pending', count: 0 },
+      { name: 'popular_destinations', label: 'Destinos Populares (popular_destinations)', status: 'pending', count: 0 },
+      { name: 'popular_routes', label: 'Rutas Populares (popular_routes)', status: 'pending', count: 0 },
+      { name: 'visited_destinations', label: 'Destinos Visitados (visited_destinations)', status: 'pending', count: 0 },
+      { name: 'fleet_classes', label: 'Flota y Clases (fleet_classes)', status: 'pending', count: 0 },
+      { name: 'parcel_services', label: 'Servicios Encomienda (parcel_services)', status: 'pending', count: 0 },
+      { name: 'leads', label: 'Cotizaciones y Reservas (leads)', status: 'pending', count: 0 },
+      { name: 'contact_messages', label: 'Mensajes de Contacto (contact_messages)', status: 'pending', count: 0 },
     ],
   });
 
@@ -101,16 +106,23 @@ export const AdminDatabaseSection: React.FC = () => {
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-3">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              Base de Datos Vinculada y Activa
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-3 ${
+              connectionInfo.connected
+                ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'
+                : 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
+            }`}>
+              <span className={`w-2 h-2 rounded-full ${connectionInfo.connected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+              {connectionInfo.connected
+                ? 'Base de Datos Vinculada y Activa'
+                : 'Esperando Credenciales de tu Nueva Base de Datos'}
             </div>
             <h1 className="font-serif italic text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight">
               Vinculación & Sincronización Supabase
             </h1>
             <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
-              Happy Travel está enlazado directamente con la base de datos Postgres de Supabase.
-              Las tablas y el almacenamiento de medios (WebP y Videos) se mantienen sincronizados en tiempo real.
+              {connectionInfo.connected
+                ? 'Happy Travel está enlazado directamente con tu base de datos Supabase. Las tablas y el almacenamiento de medios se mantienen sincronizados en tiempo real.'
+                : 'El esquema SQL está listo. Para vincular tu nueva base de datos de Happy Travel, solo necesitas indicar el Project URL y la Anon Key de tu nuevo proyecto.'}
             </p>
           </div>
 
@@ -141,15 +153,15 @@ export const AdminDatabaseSection: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6 pt-6 border-t border-[#B8860B]/20 text-xs text-slate-300">
           <div className="flex items-center gap-2">
             <Server className="w-4 h-4 text-[#F59E0B]" />
-            <span>Proyecto: <strong className="text-white font-mono">pezajodvvouezumnppaj</strong></span>
+            <span>Proyecto: <strong className="text-white font-mono">{connectionInfo.connected ? connectionInfo.url : 'Por vincular'}</strong></span>
           </div>
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>Seguridad RLS: <strong className="text-emerald-400">8 Políticas Activas</strong></span>
+            <span>Seguridad RLS: <strong className="text-emerald-400">8 Políticas Listas</strong></span>
           </div>
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-[#F59E0B]" />
-            <span>Último sync: <strong className="text-white">{lastSyncTime}</strong></span>
+            <span>Estado: <strong className="text-white">{connectionInfo.connected ? lastSyncTime : 'Listo para sincronizar'}</strong></span>
           </div>
         </div>
       </div>
@@ -163,20 +175,24 @@ export const AdminDatabaseSection: React.FC = () => {
               <Database className="w-4 h-4 text-[#B8860B]" />
               Conexión Cloud Postgres
             </span>
-            <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Activo
+            <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold border ${
+              connectionInfo.connected
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                : 'bg-amber-50 text-amber-700 border-amber-200'
+            }`}>
+              {connectionInfo.connected ? 'Activo' : 'Pendiente'}
             </span>
           </div>
           <div className="space-y-2 text-xs">
             <div className="flex justify-between py-1 border-b border-slate-100">
               <span className="text-slate-500">Host Supabase:</span>
               <span className="font-mono text-slate-800 font-medium truncate max-w-[220px]">
-                pezajodvvouezumnppaj.supabase.co
+                {connectionInfo.url}
               </span>
             </div>
             <div className="flex justify-between py-1 border-b border-slate-100">
-              <span className="text-slate-500">Región:</span>
-              <span className="text-slate-800 font-medium">us-west-2 (AWS)</span>
+              <span className="text-slate-500">Esquema SQL:</span>
+              <span className="text-slate-800 font-medium">8 Tablas + 1 Bucket Storage</span>
             </div>
             <div className="flex justify-between py-1">
               <span className="text-slate-500">Autenticación:</span>
@@ -184,12 +200,12 @@ export const AdminDatabaseSection: React.FC = () => {
             </div>
           </div>
           <a
-            href="https://supabase.com/dashboard/project/pezajodvvouezumnppaj"
+            href="https://supabase.com/dashboard"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 w-full py-2 px-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 transition-colors"
           >
-            <span>Abrir Dashboard en Supabase</span>
+            <span>Abrir Dashboard de Supabase</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-slate-500" />
           </a>
         </div>
