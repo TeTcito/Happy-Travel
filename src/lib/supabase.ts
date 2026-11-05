@@ -1,15 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const SUPABASE_URL =
+  import.meta.env.VITE_SUPABASE_URL || 'https://ewhhibgqxpekychzemrt.supabase.co';
+const SUPABASE_ANON_KEY =
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3aGhpYmdxeHBla3ljaHplbXJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4ODc1ODUsImV4cCI6MjEwOTQ2MzU4NX0.LDdr4jiijKikYkJvk3z1ug0jEHkk0tVMVnrLELjJOCY';
 
 export const isSupabaseConfigured = Boolean(
   SUPABASE_URL && SUPABASE_ANON_KEY && SUPABASE_URL.startsWith('http')
 );
 
-export const supabase = isSupabaseConfigured
-  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-  : createClient('https://placeholder.supabase.co', 'placeholder-anon-key');
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ============================================================================
 // 1. CMS MODULES (CARRUSELES Y SECCIONES DEL PANEL ADMINISTRATIVO)

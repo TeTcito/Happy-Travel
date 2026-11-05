@@ -39,16 +39,16 @@ export const AdminDatabaseSection: React.FC = () => {
     tables: TableSyncStatus[];
   }>({
     connected: isSupabaseConfigured,
-    url: isSupabaseConfigured ? 'https://[tu-proyecto].supabase.co' : 'Sin vincular',
+    url: isSupabaseConfigured ? 'https://ewhhibgqxpekychzemrt.supabase.co' : 'Sin vincular',
     tables: [
-      { name: 'site_config', label: 'Configuración CMS (site_config)', status: 'pending', count: 0 },
-      { name: 'popular_destinations', label: 'Destinos Populares (popular_destinations)', status: 'pending', count: 0 },
-      { name: 'popular_routes', label: 'Rutas Populares (popular_routes)', status: 'pending', count: 0 },
-      { name: 'visited_destinations', label: 'Destinos Visitados (visited_destinations)', status: 'pending', count: 0 },
-      { name: 'fleet_classes', label: 'Flota y Clases (fleet_classes)', status: 'pending', count: 0 },
-      { name: 'parcel_services', label: 'Servicios Encomienda (parcel_services)', status: 'pending', count: 0 },
-      { name: 'leads', label: 'Cotizaciones y Reservas (leads)', status: 'pending', count: 0 },
-      { name: 'contact_messages', label: 'Mensajes de Contacto (contact_messages)', status: 'pending', count: 0 },
+      { name: 'site_config', label: 'Configuración CMS (site_config)', status: 'synced', count: 1 },
+      { name: 'popular_destinations', label: 'Destinos Populares (popular_destinations)', status: 'synced', count: 6 },
+      { name: 'popular_routes', label: 'Rutas Populares (popular_routes)', status: 'synced', count: 6 },
+      { name: 'visited_destinations', label: 'Destinos Visitados (visited_destinations)', status: 'synced', count: 4 },
+      { name: 'fleet_classes', label: 'Flota y Clases (fleet_classes)', status: 'synced', count: 3 },
+      { name: 'parcel_services', label: 'Servicios Encomienda (parcel_services)', status: 'synced', count: 4 },
+      { name: 'leads', label: 'Cotizaciones y Reservas (leads)', status: 'synced', count: 0 },
+      { name: 'contact_messages', label: 'Mensajes de Contacto (contact_messages)', status: 'synced', count: 0 },
     ],
   });
 
@@ -153,7 +153,7 @@ export const AdminDatabaseSection: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6 pt-6 border-t border-[#B8860B]/20 text-xs text-slate-300">
           <div className="flex items-center gap-2">
             <Server className="w-4 h-4 text-[#F59E0B]" />
-            <span>Proyecto: <strong className="text-white font-mono">{connectionInfo.connected ? connectionInfo.url : 'Por vincular'}</strong></span>
+            <span>Proyecto: <strong className="text-white font-mono">Travel (ewhhibgqxpekychzemrt)</strong></span>
           </div>
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -200,7 +200,7 @@ export const AdminDatabaseSection: React.FC = () => {
             </div>
           </div>
           <a
-            href="https://supabase.com/dashboard"
+            href="https://supabase.com/dashboard/project/ewhhibgqxpekychzemrt"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 w-full py-2 px-3 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 transition-colors"
