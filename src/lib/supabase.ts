@@ -63,8 +63,8 @@ export async function uploadMediaToSupabase(
       .replace(/[^a-z0-9_-]/g, '-');
     const fileName = `${prefix}-${safeName}-${Date.now()}.${ext}`;
 
-    // Intentamos subir al bucket 'happy-travel-media' o 'hacienda-media'
-    const targetBucket = 'hacienda-media';
+    // Usamos el bucket oficial 'happy-travel-media'
+    const targetBucket = 'happy-travel-media';
 
     const { error: uploadError } = await supabase.storage
       .from(targetBucket)
@@ -86,5 +86,75 @@ export async function uploadMediaToSupabase(
   } catch (err) {
     console.warn('Error subiendo archivo a Supabase Storage:', err);
     return null;
+  }
+}
+
+// ============================================================================
+// 3. ESTADO Y SINCRONIZACIÓN DE BASE DE DATOS
+// ============================================================================
+export interface TableSyncStatus {
+  name: string;
+  label: string;
+  status: 'synced' | 'pending' | 'error';
+  count: number;
+}
+
+export async function checkDatabaseSync(): Promise<{
+  connected: boolean;
+  url: string;
+  tables: TableSyncStatus[];
+}> {
+  const tableList: { name: string; label: string }[] = [
+    { name: 'site_config', label: 'Configuración CMS (site_config)' },
+    { name: 'leads', label: 'Cotizaciones y Reservas (leads)' },
+    { name: 'contact_messages', label: 'Mensajes de Contacto (contact_messages)' },
+    { name: 'popular_destinations', label: 'Destinos Populares (popular_destinations)' },
+    { name: 'popular_routes', label: 'Rutas Populares (popular_routes)' },
+    { name: 'visited_destinations', label: 'Destinos Visitados (visited_destinations)' },
+    { name: 'fleet_classes', label: 'Flota y Clases (fleet_classes)' },
+    { name: 'parcel_services', label: 'Servicios Encomienda (parcel_services)' },
+  ];
+
+  try {
+    const results: TableSyncStatus[] = [];
+    for (const t of tableList) {
+      const { count, error } = await supabase
+        .from(t.name)
+        .select('*', { count: 'exact', head: true });
+
+      if (error) {
+        results.push({
+          name: t.name,
+          label: t.label,
+          status: 'error',
+          count: 0,
+        });
+      } else {
+        results.push({
+          name: t.name,
+          label: t.label,
+          status: 'synced',
+          count: count ?? 0,
+        });
+      }
+    }
+
+    const connected = results.some((r) => r.status === 'synced');
+    return {
+      connected,
+      url: SUPABASE_URL,
+      tables: results,
+    };
+  } catch (err) {
+    return {
+      connected: false,
+      url: SUPABASE_URL,
+      tables: tableList.map((t) => ({
+        name: t.name,
+        label: t.label,
+        status: 'error',
+        count: 0,
+      })),
+    };
   }
 }

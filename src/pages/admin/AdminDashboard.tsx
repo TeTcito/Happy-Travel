@@ -4,6 +4,7 @@ import { useCMS } from '../../context/CMSContext';
 import { saveModulesToSupabase } from '../../lib/supabase';
 import { AdminSidebar, type AdminModuleTab } from '../../components/admin/AdminSidebar';
 import { AdminProfileSection } from '../../components/admin/AdminProfileSection';
+import { AdminDatabaseSection } from '../../components/admin/AdminDatabaseSection';
 import { AdminMediaUploader } from '../../components/admin/AdminMediaUploader';
 import { AdminSaveModal, type SaveModalState } from '../../components/admin/AdminSaveModal';
 import type {
@@ -32,6 +33,7 @@ import {
   Shield,
   ArrowUpRight,
   Eye,
+  Database,
 } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
@@ -554,6 +556,19 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => setActiveTab('database')}
+              className={`px-3.5 py-2 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                activeTab === 'database'
+                  ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50'
+                  : 'bg-white/10 hover:bg-white/15 text-slate-200 border-[#B8860B]/35'
+              }`}
+            >
+              <Database className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Base de Datos (Supabase)</span>
+            </button>
+
             <a
               href={previewLink.hash}
               target="_blank"
@@ -618,6 +633,11 @@ export const AdminDashboard: React.FC = () => {
               MÓDULO: MI PERFIL
              =============================================================== */}
           {activeTab === 'profile' && <AdminProfileSection />}
+
+          {/* ===============================================================
+              MÓDULO: BASE DE DATOS Y SUPABASE
+             =============================================================== */}
+          {activeTab === 'database' && <AdminDatabaseSection />}
 
           {/* ===============================================================
               MÓDULO 1: DESTINOS POPULARES EN ECUADOR
