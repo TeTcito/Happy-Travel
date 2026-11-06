@@ -337,8 +337,13 @@ export const ServicesTab: React.FC<ServicesTabProps> = ({ onOpenQuote }) => {
                 className="group relative h-[210px] sm:h-[225px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-end p-2.5 pb-2.5 border border-slate-200/90 hover:border-amber-400"
               >
                 <img
-                  src={route.image}
+                  src={(route as any).originalImage || route.image}
                   alt={route.title}
+                  style={{
+                    objectPosition: (route as any).imagePosition || '50% 50%',
+                    transform: (route as any).imageScale && (route as any).imageScale > 1 ? `scale(${(route as any).imageScale})` : undefined,
+                    transformOrigin: (route as any).imagePosition || '50% 50%',
+                  }}
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent" />
@@ -429,8 +434,13 @@ export const ServicesTab: React.FC<ServicesTabProps> = ({ onOpenQuote }) => {
                 className="group relative h-[185px] sm:h-[200px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-end p-2.5 pb-3 border border-slate-200/90 hover:border-amber-400"
               >
                 <img
-                  src={dest.image}
+                  src={(dest as any).originalImage || dest.image}
                   alt={dest.name}
+                  style={{
+                    objectPosition: (dest as any).imagePosition || '50% 50%',
+                    transform: (dest as any).imageScale && (dest as any).imageScale > 1 ? `scale(${(dest as any).imageScale})` : undefined,
+                    transformOrigin: (dest as any).imagePosition || '50% 50%',
+                  }}
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
@@ -594,8 +604,13 @@ export const ServicesTab: React.FC<ServicesTabProps> = ({ onOpenQuote }) => {
                 {/* Imagen que ocupa el 100% del ancho de la tarjeta */}
                 <div className="w-full h-28 overflow-hidden bg-slate-100 relative">
                   <img
-                    src={item.image}
+                    src={(item as any).originalImage || item.image}
                     alt={item.title}
+                    style={{
+                      objectPosition: (item as any).imagePosition || '50% 50%',
+                      transform: (item as any).imageScale && (item as any).imageScale > 1 ? `scale(${(item as any).imageScale})` : undefined,
+                      transformOrigin: (item as any).imagePosition || '50% 50%',
+                    }}
                     className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-500 block"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />

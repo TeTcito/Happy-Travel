@@ -680,9 +680,13 @@ export const AdminDashboard: React.FC = () => {
                         <div>
                           <div className="relative aspect-video overflow-hidden bg-black">
                             <img
-                              src={dest.image}
+                              src={dest.originalImage || dest.image}
                               alt={dest.name}
-                              style={{ objectPosition: dest.imagePosition || '50% 50%' }}
+                              style={{
+                                objectPosition: dest.imagePosition || '50% 50%',
+                                transform: dest.imageScale && dest.imageScale > 1 ? `scale(${dest.imageScale})` : undefined,
+                                transformOrigin: dest.imagePosition || '50% 50%',
+                              }}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                             <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
@@ -861,12 +865,20 @@ export const AdminDashboard: React.FC = () => {
                       <AdminMediaUploader
                         label="2. Fotografía del Destino (WebP)"
                         imageUrl={editingDest?.image || ''}
+                        originalImageUrl={editingDest?.originalImage || editingDest?.image || ''}
                         imagePosition={editingDest?.imagePosition || '50% 50%'}
+                        imageScale={editingDest?.imageScale || 1}
                         onImageChange={(url) =>
                           setEditingDest((prev) => prev ? { ...prev, image: url } : null)
                         }
+                        onOriginalImageChange={(url) =>
+                          setEditingDest((prev) => prev ? { ...prev, originalImage: url } : null)
+                        }
                         onImagePositionChange={(pos) =>
                           setEditingDest((prev) => prev ? { ...prev, imagePosition: pos } : null)
+                        }
+                        onImageScaleChange={(scale) =>
+                          setEditingDest((prev) => prev ? { ...prev, imageScale: scale } : null)
                         }
                         allowVideo={false}
                         onProcessingChange={setIsMediaUploading}
@@ -886,10 +898,14 @@ export const AdminDashboard: React.FC = () => {
                         {/* Tarjeta idéntica a HomeTab */}
                         <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-black aspect-[4/3] group">
                           <img
-                            src={editingDest?.image || '/destinations/manta-skyline-coastal.webp'}
+                            src={editingDest?.originalImage || editingDest?.image || '/destinations/manta-skyline-coastal.webp'}
                             alt={editingDest?.name}
-                            style={{ objectPosition: editingDest?.imagePosition || '50% 50%' }}
-                            className="w-full h-full object-cover"
+                            style={{
+                              objectPosition: editingDest?.imagePosition || '50% 50%',
+                              transform: editingDest?.imageScale && editingDest.imageScale > 1 ? `scale(${editingDest.imageScale})` : undefined,
+                              transformOrigin: editingDest?.imagePosition || '50% 50%',
+                            }}
+                            className="w-full h-full object-cover transition-transform duration-150"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
                           <div className="absolute top-3 left-3">
@@ -965,9 +981,13 @@ export const AdminDashboard: React.FC = () => {
                         <div>
                           <div className="relative aspect-[16/10] overflow-hidden bg-black">
                             <img
-                              src={route.image}
+                              src={route.originalImage || route.image}
                               alt={route.title}
-                              style={{ objectPosition: route.imagePosition || '50% 50%' }}
+                              style={{
+                                objectPosition: route.imagePosition || '50% 50%',
+                                transform: route.imageScale && route.imageScale > 1 ? `scale(${route.imageScale})` : undefined,
+                                transformOrigin: route.imagePosition || '50% 50%',
+                              }}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                             <div className="absolute top-2.5 left-2.5">
@@ -1181,12 +1201,20 @@ export const AdminDashboard: React.FC = () => {
                       <AdminMediaUploader
                         label="2. Fotografía de la Ruta (WebP)"
                         imageUrl={editingRoute?.image || ''}
+                        originalImageUrl={editingRoute?.originalImage || editingRoute?.image || ''}
                         imagePosition={editingRoute?.imagePosition || '50% 50%'}
+                        imageScale={editingRoute?.imageScale || 1}
                         onImageChange={(url) =>
                           setEditingRoute((prev) => prev ? { ...prev, image: url } : null)
                         }
+                        onOriginalImageChange={(url) =>
+                          setEditingRoute((prev) => prev ? { ...prev, originalImage: url } : null)
+                        }
                         onImagePositionChange={(pos) =>
                           setEditingRoute((prev) => prev ? { ...prev, imagePosition: pos } : null)
+                        }
+                        onImageScaleChange={(scale) =>
+                          setEditingRoute((prev) => prev ? { ...prev, imageScale: scale } : null)
                         }
                         allowVideo={false}
                         onProcessingChange={setIsMediaUploading}
@@ -1206,10 +1234,14 @@ export const AdminDashboard: React.FC = () => {
                         {/* Tarjeta idéntica a ServicesTab */}
                         <div className="relative h-[320px] rounded-[22px] overflow-hidden shadow-md border border-slate-900/10 group bg-black">
                           <img
-                            src={editingRoute?.image || 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Vista_cerro_santa_ana.jpg/1280px-Vista_cerro_santa_ana.jpg'}
+                            src={editingRoute?.originalImage || editingRoute?.image || 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Vista_cerro_santa_ana.jpg/1280px-Vista_cerro_santa_ana.jpg'}
                             alt={editingRoute?.title}
-                            style={{ objectPosition: editingRoute?.imagePosition || '50% 50%' }}
-                            className="w-full h-full object-cover"
+                            style={{
+                              objectPosition: editingRoute?.imagePosition || '50% 50%',
+                              transform: editingRoute?.imageScale && editingRoute.imageScale > 1 ? `scale(${editingRoute.imageScale})` : undefined,
+                              transformOrigin: editingRoute?.imagePosition || '50% 50%',
+                            }}
+                            className="w-full h-full object-cover transition-transform duration-150"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/20" />
                           <div className="absolute top-3.5 left-3.5">
@@ -1290,9 +1322,13 @@ export const AdminDashboard: React.FC = () => {
                         <div>
                           <div className="relative aspect-square overflow-hidden bg-black">
                             <img
-                              src={dest.image}
+                              src={dest.originalImage || dest.image}
                               alt={dest.name}
-                              style={{ objectPosition: dest.imagePosition || '50% 50%' }}
+                              style={{
+                                objectPosition: dest.imagePosition || '50% 50%',
+                                transform: dest.imageScale && dest.imageScale > 1 ? `scale(${dest.imageScale})` : undefined,
+                                transformOrigin: dest.imagePosition || '50% 50%',
+                              }}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                             <div className="absolute top-2.5 left-2.5">
@@ -1438,12 +1474,20 @@ export const AdminDashboard: React.FC = () => {
                       <AdminMediaUploader
                         label="2. Fotografía del Destino"
                         imageUrl={editingVisDest?.image || ''}
+                        originalImageUrl={editingVisDest?.originalImage || editingVisDest?.image || ''}
                         imagePosition={editingVisDest?.imagePosition || '50% 50%'}
+                        imageScale={editingVisDest?.imageScale || 1}
                         onImageChange={(url) =>
                           setEditingVisDest((prev) => prev ? { ...prev, image: url } : null)
                         }
+                        onOriginalImageChange={(url) =>
+                          setEditingVisDest((prev) => prev ? { ...prev, originalImage: url } : null)
+                        }
                         onImagePositionChange={(pos) =>
                           setEditingVisDest((prev) => prev ? { ...prev, imagePosition: pos } : null)
+                        }
+                        onImageScaleChange={(scale) =>
+                          setEditingVisDest((prev) => prev ? { ...prev, imageScale: scale } : null)
                         }
                         allowVideo={false}
                         onProcessingChange={setIsMediaUploading}
@@ -1461,10 +1505,14 @@ export const AdminDashboard: React.FC = () => {
 
                         <div className="relative aspect-square rounded-[22px] overflow-hidden shadow-md bg-black group">
                           <img
-                            src={editingVisDest?.image || 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Quito_as_from_panecillo_Basilica.jpg/1280px-Quito_as_from_panecillo_Basilica.jpg'}
+                            src={editingVisDest?.originalImage || editingVisDest?.image || 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Quito_as_from_panecillo_Basilica.jpg/1280px-Quito_as_from_panecillo_Basilica.jpg'}
                             alt={editingVisDest?.name}
-                            style={{ objectPosition: editingVisDest?.imagePosition || '50% 50%' }}
-                            className="w-full h-full object-cover"
+                            style={{
+                              objectPosition: editingVisDest?.imagePosition || '50% 50%',
+                              transform: editingVisDest?.imageScale && editingVisDest.imageScale > 1 ? `scale(${editingVisDest.imageScale})` : undefined,
+                              transformOrigin: editingVisDest?.imagePosition || '50% 50%',
+                            }}
+                            className="w-full h-full object-cover transition-transform duration-150"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                           <div className="absolute bottom-4 left-4 right-4 text-white">
@@ -1547,9 +1595,13 @@ export const AdminDashboard: React.FC = () => {
                           </p>
                           <div className="mt-4 -mx-6 overflow-hidden bg-slate-50">
                             <img
-                              src={fleet.image}
+                              src={fleet.originalImage || fleet.image}
                               alt={fleet.title}
-                              style={{ objectPosition: fleet.imagePosition || '50% 50%' }}
+                              style={{
+                                objectPosition: fleet.imagePosition || '50% 50%',
+                                transform: fleet.imageScale && fleet.imageScale > 1 ? `scale(${fleet.imageScale})` : undefined,
+                                transformOrigin: fleet.imagePosition || '50% 50%',
+                              }}
                               className="w-full h-40 object-contain object-left block transform group-hover:scale-105 transition-transform duration-500"
                             />
                           </div>
@@ -1683,12 +1735,20 @@ export const AdminDashboard: React.FC = () => {
                       <AdminMediaUploader
                         label="2. Fotografía del Vehículo"
                         imageUrl={editingFleet?.image || ''}
+                        originalImageUrl={editingFleet?.originalImage || editingFleet?.image || ''}
                         imagePosition={editingFleet?.imagePosition || '50% 50%'}
+                        imageScale={editingFleet?.imageScale || 1}
                         onImageChange={(url) =>
                           setEditingFleet((prev) => prev ? { ...prev, image: url } : null)
                         }
+                        onOriginalImageChange={(url) =>
+                          setEditingFleet((prev) => prev ? { ...prev, originalImage: url } : null)
+                        }
                         onImagePositionChange={(pos) =>
                           setEditingFleet((prev) => prev ? { ...prev, imagePosition: pos } : null)
+                        }
+                        onImageScaleChange={(scale) =>
+                          setEditingFleet((prev) => prev ? { ...prev, imageScale: scale } : null)
                         }
                         allowVideo={false}
                         onProcessingChange={setIsMediaUploading}
@@ -1716,9 +1776,14 @@ export const AdminDashboard: React.FC = () => {
                           </div>
                           <div className="mt-4 -mx-6 -mb-6 overflow-hidden">
                             <img
-                              src={editingFleet?.image || '/fleet/class_business.jpg'}
+                              src={editingFleet?.originalImage || editingFleet?.image || '/fleet/class_business.jpg'}
                               alt={editingFleet?.title}
-                              className="w-full h-auto object-contain object-left block"
+                              style={{
+                                objectPosition: editingFleet?.imagePosition || '50% 50%',
+                                transform: editingFleet?.imageScale && editingFleet.imageScale > 1 ? `scale(${editingFleet.imageScale})` : undefined,
+                                transformOrigin: editingFleet?.imagePosition || '50% 50%',
+                              }}
+                              className="w-full h-auto object-contain object-left block transition-transform duration-150"
                             />
                           </div>
                         </div>
@@ -1778,9 +1843,13 @@ export const AdminDashboard: React.FC = () => {
                         <div>
                           <div className="w-full h-44 rounded-2xl overflow-hidden mb-3 relative bg-slate-100">
                             <img
-                              src={service.image}
+                              src={service.originalImage || service.image}
                               alt={service.title}
-                              style={{ objectPosition: service.imagePosition || '50% 50%' }}
+                              style={{
+                                objectPosition: service.imagePosition || '50% 50%',
+                                transform: service.imageScale && service.imageScale > 1 ? `scale(${service.imageScale})` : undefined,
+                                transformOrigin: service.imagePosition || '50% 50%',
+                              }}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                             <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/75 text-white text-[10px] font-bold">
@@ -1930,12 +1999,20 @@ export const AdminDashboard: React.FC = () => {
                       <AdminMediaUploader
                         label="2. Fotografía del Servicio"
                         imageUrl={editingParcel?.image || ''}
+                        originalImageUrl={editingParcel?.originalImage || editingParcel?.image || ''}
                         imagePosition={editingParcel?.imagePosition || '50% 50%'}
+                        imageScale={editingParcel?.imageScale || 1}
                         onImageChange={(url) =>
                           setEditingParcel((prev) => prev ? { ...prev, image: url } : null)
                         }
+                        onOriginalImageChange={(url) =>
+                          setEditingParcel((prev) => prev ? { ...prev, originalImage: url } : null)
+                        }
                         onImagePositionChange={(pos) =>
                           setEditingParcel((prev) => prev ? { ...prev, imagePosition: pos } : null)
+                        }
+                        onImageScaleChange={(scale) =>
+                          setEditingParcel((prev) => prev ? { ...prev, imageScale: scale } : null)
                         }
                         allowVideo={false}
                         onProcessingChange={setIsMediaUploading}
@@ -1956,10 +2033,14 @@ export const AdminDashboard: React.FC = () => {
                           <div>
                             <div className="w-full h-44 rounded-2xl overflow-hidden mb-3 relative bg-slate-100">
                               <img
-                                src={editingParcel?.image || '/parcels/parcel-cargo-trunk.jpg'}
+                                src={editingParcel?.originalImage || editingParcel?.image || '/parcels/parcel-cargo-trunk.jpg'}
                                 alt={editingParcel?.title}
-                                style={{ objectPosition: editingParcel?.imagePosition || '50% 50%' }}
-                                className="w-full h-full object-cover"
+                                style={{
+                                  objectPosition: editingParcel?.imagePosition || '50% 50%',
+                                  transform: editingParcel?.imageScale && editingParcel.imageScale > 1 ? `scale(${editingParcel.imageScale})` : undefined,
+                                  transformOrigin: editingParcel?.imagePosition || '50% 50%',
+                                }}
+                                className="w-full h-full object-cover transition-transform duration-150"
                               />
                               <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-lg bg-black/75 text-white text-[10px] font-bold">
                                 {editingParcel?.tag || 'Tag'}

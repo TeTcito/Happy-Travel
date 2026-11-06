@@ -23,8 +23,12 @@ import {
 interface AdminMediaUploaderProps {
   imageUrl: string;
   onImageChange: (url: string) => void;
+  originalImageUrl?: string;
+  onOriginalImageChange?: (url: string) => void;
   imagePosition?: string;
   onImagePositionChange?: (pos: string) => void;
+  imageScale?: number;
+  onImageScaleChange?: (scale: number) => void;
   videoUrl?: string;
   onVideoChange?: (url: string) => void;
   mediaType?: 'image' | 'video';
@@ -38,7 +42,6 @@ type Offset = { x: number; y: number };
 
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 3;
-const CROP_BG = '#080A0E';
 
 /**
  * Calcula la posición CSS object-position (X% Y%) a partir del offset y dimensiones.
@@ -63,73 +66,34 @@ const computePositionPercent = (
 };
 
 /**
- * Exporta EXACTAMENTE lo que se ve en el visor cuadrado (WYSIWYG) a un WebP 1:1.
+ * Calcula el offset (x, y) a partir de object-position (X% Y%)
  */
-const cropVisibleSquare = async (
-  src: string,
-  offset: Offset,
-  renderW: number,
-  renderH: number,
-  S: number
-): Promise<Blob | null> => {
-  try {
-    let cleanSrc = src;
-    if (/^https?:\/\//.test(src)) {
-      try {
-        const resp = await fetch(src, { mode: 'cors', cache: 'no-cache' });
-        if (resp.ok) {
-          const b = await resp.blob();
-          cleanSrc = URL.createObjectURL(b);
-        }
-      } catch (e) {
-        console.warn('Fetch fallback to direct src:', e);
-      }
-    }
-
-    return await new Promise<Blob | null>((resolve) => {
-      const img = new Image();
-      if (/^https?:\/\//.test(cleanSrc)) img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        try {
-          const nativePerScreenPx = img.naturalWidth / renderW;
-          const N = Math.round(Math.min(1600, Math.max(800, nativePerScreenPx * S)));
-          const r = N / S;
-
-          const canvas = document.createElement('canvas');
-          canvas.width = N;
-          canvas.height = N;
-          const ctx = canvas.getContext('2d');
-          if (!ctx) return resolve(null);
-
-          ctx.fillStyle = CROP_BG;
-          ctx.fillRect(0, 0, N, N);
-          ctx.imageSmoothingEnabled = true;
-          ctx.imageSmoothingQuality = 'high';
-          ctx.drawImage(img, offset.x * r, offset.y * r, renderW * r, renderH * r);
-
-          canvas.toBlob((blob) => resolve(blob), 'image/webp', 0.88);
-        } catch (err) {
-          console.warn('Canvas export failed:', err);
-          resolve(null);
-        }
-      };
-      img.onerror = (e) => {
-        console.warn('Image load failed for crop:', cleanSrc, e);
-        resolve(null);
-      };
-      img.src = cleanSrc;
-    });
-  } catch (err) {
-    console.warn('cropVisibleSquare error:', err);
-    return null;
-  }
+const computeOffsetFromPosition = (
+  posStr: string,
+  w: number,
+  h: number,
+  boxSize: number
+): Offset => {
+  const parts = (posStr || '50% 50%').trim().split(/\s+/);
+  const px = parseFloat(parts[0]) || 50;
+  const py = parseFloat(parts[1] || parts[0]) || 50;
+  const maxOverflowX = w - boxSize;
+  const maxOverflowY = h - boxSize;
+  return {
+    x: maxOverflowX > 0 ? -(px / 100) * maxOverflowX : (boxSize - w) / 2,
+    y: maxOverflowY > 0 ? -(py / 100) * maxOverflowY : (boxSize - h) / 2,
+  };
 };
 
 export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
   imageUrl,
   onImageChange,
+  originalImageUrl,
+  onOriginalImageChange,
   imagePosition = '50% 50%',
   onImagePositionChange,
+  imageScale = 1,
+  onImageScaleChange,
   videoUrl = '',
   onVideoChange,
   mediaType = 'image',
@@ -138,17 +102,17 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
   label = '2. Multimedia (Imagen WebP / Video)',
   onProcessingChange,
 }) => {
+  const masterUrl = originalImageUrl || imageUrl || '';
   const [isProcessing, setIsProcessing] = useState(false);
   const [videoUploadNotice, setVideoUploadNotice] = useState<string | null>(null);
-  const [displaySrc, setDisplaySrc] = useState<string>(imageUrl || '');
-  const [rawSourceUrl, setRawSourceUrl] = useState<string>(imageUrl || '');
+  const [displaySrc, setDisplaySrc] = useState<string>(masterUrl);
+  const [rawSourceUrl, setRawSourceUrl] = useState<string>(masterUrl);
   const lastUploadedUrlRef = useRef<string | null>(null);
 
   // ESTADO DEL ENCUADRE
   const [isPanMode, setIsPanMode] = useState(false);
-  const [isCropping, setIsCropping] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [zoom, setZoom] = useState(MIN_ZOOM);
+  const [zoom, setZoom] = useState(imageScale && imageScale >= 1 ? imageScale : MIN_ZOOM);
   const [offset, setOffset] = useState<Offset | null>(null);
   const [boxSize, setBoxSize] = useState(0);
   const [naturalDimensions, setNaturalDimensions] = useState({ width: 0, height: 0 });
@@ -165,27 +129,31 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
     setZoom(MIN_ZOOM);
     setOffset(null);
     onImagePositionChange?.('50% 50%');
+    onImageScaleChange?.(1);
   };
 
   useEffect(() => {
-    if (isProcessing || isCropping) return;
+    if (isProcessing) return;
 
-    if (imageUrl) {
-      if (imageUrl !== lastUploadedUrlRef.current && imageUrl !== displaySrc) {
-        lastUploadedUrlRef.current = imageUrl;
-        setDisplaySrc(imageUrl);
-        setRawSourceUrl(imageUrl);
-        resetFraming();
+    const currentMaster = originalImageUrl || imageUrl || '';
+    if (currentMaster) {
+      if (currentMaster !== lastUploadedUrlRef.current && currentMaster !== rawSourceUrl) {
+        lastUploadedUrlRef.current = currentMaster;
+        setDisplaySrc(currentMaster);
+        setRawSourceUrl(currentMaster);
+        setZoom(imageScale && imageScale >= 1 ? imageScale : MIN_ZOOM);
+        setOffset(null);
         setIsPanMode(false);
       }
-    } else if (!imageUrl && displaySrc) {
+    } else if (!currentMaster && displaySrc) {
       lastUploadedUrlRef.current = '';
       setDisplaySrc('');
       setRawSourceUrl('');
-      resetFraming();
+      setZoom(MIN_ZOOM);
+      setOffset(null);
       setIsPanMode(false);
     }
-  }, [imageUrl, isProcessing, isCropping]);
+  }, [imageUrl, originalImageUrl, imageScale, isProcessing]);
 
   useEffect(() => {
     const src = rawSourceUrl || displaySrc;
@@ -231,7 +199,11 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
   };
 
   const { w: renderW, h: renderH } = getRenderSize();
-  const effectiveOffset: Offset = offset ?? { x: (boxSize - renderW) / 2, y: (boxSize - renderH) / 2 };
+  const effectiveOffset: Offset =
+    offset ??
+    (imagePosition
+      ? computeOffsetFromPosition(imagePosition, renderW, renderH, boxSize)
+      : { x: (boxSize - renderW) / 2, y: (boxSize - renderH) / 2 });
 
   const latestRef = useRef({ effectiveOffset, renderW, renderH, zoom });
   latestRef.current = { effectiveOffset, renderW, renderH, zoom };
@@ -245,11 +217,17 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
     const px = (cx - cur.x) / w;
     const py = (cy - cur.y) / h;
     setZoom(nextZoom);
-    setOffset(clampOffset(cx - px * nw, cy - py * nh, nw, nh));
+    const nextOffset = clampOffset(cx - px * nw, cy - py * nh, nw, nh);
+    setOffset(nextOffset);
+    if (dimsReady && boxSize > 0) {
+      const pos = computePositionPercent(nextOffset, nw, nh, boxSize);
+      onImagePositionChange?.(pos);
+      onImageScaleChange?.(nextZoom);
+    }
   };
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isPanMode || isCropping || !dimsReady) return;
+    if (!isPanMode || isProcessing || !dimsReady) return;
     if ((e.target as HTMLElement).closest('button, input')) return;
     e.preventDefault();
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -288,7 +266,7 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
       rafRef.current = null;
     }
     const finalOffset = pendingOffsetRef.current ?? effectiveOffset;
-    if (pendingOffsetRef.current) setOffset(pendingOffsetRef.current);
+    if (pendingOffsetRef.current) setOffset(finalOffset);
     pendingOffsetRef.current = null;
     dragRef.current = null;
     if (e.currentTarget.hasPointerCapture(e.pointerId)) {
@@ -299,6 +277,7 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
     if (dimsReady && boxSize > 0) {
       const pos = computePositionPercent(finalOffset, renderW, renderH, boxSize);
       onImagePositionChange?.(pos);
+      onImageScaleChange?.(zoom);
     }
   };
 
@@ -329,7 +308,9 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
     setIsPanMode(false);
     if (onMediaTypeChange) onMediaTypeChange('image');
     onImageChange(instantLocalUrl);
+    onOriginalImageChange?.(instantLocalUrl);
     onImagePositionChange?.('50% 50%');
+    onImageScaleChange?.(1);
 
     try {
       setIsProcessing(true);
@@ -353,12 +334,15 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
       setDisplaySrc(finalUrl);
       setRawSourceUrl(finalUrl);
       onImageChange(finalUrl);
+      onOriginalImageChange?.(finalUrl);
       onImagePositionChange?.('50% 50%');
+      onImageScaleChange?.(1);
     } catch (err) {
       console.error('Error al procesar imagen:', err);
       lastUploadedUrlRef.current = instantLocalUrl;
       setDisplaySrc(instantLocalUrl);
       onImageChange(instantLocalUrl);
+      onOriginalImageChange?.(instantLocalUrl);
     } finally {
       setIsProcessing(false);
       if (onProcessingChange) onProcessingChange(false);
@@ -394,64 +378,26 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
     }
   };
 
-  const handleApplyCrop = async () => {
-    const src = rawSourceUrl || displaySrc;
-    if (!src || !dimsReady) {
-      setIsPanMode(false);
-      return;
-    }
-    try {
-      setIsCropping(true);
-      if (onProcessingChange) onProcessingChange(true);
-
+  /**
+   * Cierra el modo de encuadre guardando la escala y posición de forma NO DESTRUCTIVA.
+   * La imagen original WebP se mantiene 100% intacta, permitiendo reencuadrar y quitar zoom en cualquier momento.
+   */
+  const handleApplyCrop = () => {
+    if (dimsReady && boxSize > 0) {
       const posPercent = computePositionPercent(effectiveOffset, renderW, renderH, boxSize);
       onImagePositionChange?.(posPercent);
-
-      const blob = await cropVisibleSquare(src, effectiveOffset, renderW, renderH, boxSize);
-      if (!blob) {
-        setIsPanMode(false);
-        return;
+      onImageScaleChange?.(zoom);
+      const master = masterUrl || rawSourceUrl || displaySrc;
+      if (master) {
+        onImageChange(master);
+        onOriginalImageChange?.(master);
       }
-
-      const localUrl = URL.createObjectURL(blob);
-      await new Promise<void>((resolve) => {
-        const pre = new window.Image();
-        pre.onload = () => resolve();
-        pre.onerror = () => resolve();
-        pre.src = localUrl;
-        if (pre.complete) resolve();
-      });
-
-      lastUploadedUrlRef.current = localUrl;
-      setDisplaySrc(localUrl);
-      setRawSourceUrl(localUrl);
-      resetFraming();
-      setIsPanMode(false);
-      onImageChange(localUrl);
-      onImagePositionChange?.('50% 50%');
-
-      const uploaded = await uploadMediaToSupabase(
-        new File([blob], `crop-${Date.now()}.webp`, { type: 'image/webp' }),
-        'img'
-      );
-      const finalUrl = uploaded || localUrl;
-      lastUploadedUrlRef.current = finalUrl;
-      setDisplaySrc(finalUrl);
-      setRawSourceUrl(finalUrl);
-      onImageChange(finalUrl);
-      onImagePositionChange?.('50% 50%');
-    } catch (err) {
-      console.warn('Error al aplicar el encuadre:', err);
-      setIsPanMode(false);
-    } finally {
-      setIsCropping(false);
-      setIsPanMode(false);
-      if (onProcessingChange) onProcessingChange(false);
     }
+    setIsPanMode(false);
   };
 
   const activeImageSrc = displaySrc;
-  const showOverlayLoader = isProcessing || isCropping;
+  const showOverlayLoader = isProcessing;
 
   return (
     <div className="space-y-4 flex flex-col justify-between">
@@ -639,11 +585,15 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
                   )
                 ) : (
                   <img
-                    src={activeImageSrc}
+                    src={rawSourceUrl || activeImageSrc}
                     alt="Vista previa"
                     draggable={false}
-                    style={{ objectPosition: imagePosition || '50% 50%' }}
-                    className="w-full h-full object-cover"
+                    style={{
+                      objectPosition: imagePosition || '50% 50%',
+                      transform: (imageScale || zoom) > 1 ? `scale(${imageScale || zoom})` : undefined,
+                      transformOrigin: imagePosition || '50% 50%',
+                    }}
+                    className="w-full h-full object-cover transition-transform duration-150"
                   />
                 )}
 
@@ -657,7 +607,7 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
                   </div>
                 )}
 
-                {/* Animación central de subida / aplicación */}
+                {/* Animación central de subida */}
                 {showOverlayLoader && (
                   <div className="absolute inset-0 bg-slate-950/80 flex flex-col items-center justify-center text-white gap-2.5 z-30 p-4 text-center">
                     <div className="relative flex items-center justify-center">
@@ -665,7 +615,7 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
                       <Loader2 className="w-5 h-5 text-[#F59E0B] animate-spin absolute -bottom-1 -right-1" />
                     </div>
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-200">
-                      {isCropping ? 'Aplicando encuadre...' : 'Subiendo a la nube...'}
+                      Subiendo a la nube...
                     </span>
                   </div>
                 )}
@@ -746,7 +696,11 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
                     </button>
                     <button
                       type="button"
-                      onClick={() => setIsPanMode(true)}
+                      onClick={() => {
+                        setZoom(imageScale && imageScale >= 1 ? imageScale : MIN_ZOOM);
+                        setOffset(null);
+                        setIsPanMode(true);
+                      }}
                       className="px-3 py-2 rounded-xl bg-black text-[#F59E0B] border border-[#B8860B]/60 text-xs font-bold hover:bg-slate-900 transition-colors shadow cursor-pointer flex items-center gap-1.5 shrink-0"
                     >
                       <Hand className="w-3.5 h-3.5" />
@@ -792,6 +746,7 @@ export const AdminMediaUploader: React.FC<AdminMediaUploaderProps> = ({
                     setDisplaySrc(e.target.value);
                     setRawSourceUrl(e.target.value);
                     onImageChange(e.target.value);
+                    onOriginalImageChange?.(e.target.value);
                   }}
                   placeholder="https://... o /destinations/..."
                   className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:outline-none focus:border-[#B8860B]"

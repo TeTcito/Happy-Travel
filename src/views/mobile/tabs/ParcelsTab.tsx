@@ -290,8 +290,13 @@ export const ParcelsTab: React.FC<ParcelsTabProps> = ({ onOpenQuote }) => {
                       {/* Imagen ocupando el 100% del ancho superior de la tarjeta */}
                       <div className="w-full h-22 sm:h-24 overflow-hidden relative bg-slate-100">
                         <img 
-                          src={service.image} 
+                          src={(service as any).originalImage || service.image} 
                           alt={service.title} 
+                          style={{
+                            objectPosition: (service as any).imagePosition || '50% 50%',
+                            transform: (service as any).imageScale && (service as any).imageScale > 1 ? `scale(${(service as any).imageScale})` : undefined,
+                            transformOrigin: (service as any).imagePosition || '50% 50%',
+                          }}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                         />
                         <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-black/75 backdrop-blur-xs text-white text-[7.5px] font-bold">

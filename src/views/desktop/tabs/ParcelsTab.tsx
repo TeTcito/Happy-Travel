@@ -398,8 +398,13 @@ export const ParcelsTab: React.FC<ParcelsTabProps> = ({ onOpenQuote }) => {
                       {/* Imagen con bordes redondeados (SIN PERSONAS) */}
                       <div className="w-full h-44 sm:h-48 rounded-2xl overflow-hidden mb-4 relative bg-slate-100">
                         <img 
-                          src={service.image} 
+                          src={(service as any).originalImage || service.image} 
                           alt={service.title} 
+                          style={{
+                            objectPosition: (service as any).imagePosition || '50% 50%',
+                            transform: (service as any).imageScale && (service as any).imageScale > 1 ? `scale(${(service as any).imageScale})` : undefined,
+                            transformOrigin: (service as any).imagePosition || '50% 50%',
+                          }}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                         />
                         <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-md text-white text-[10px] font-bold tracking-wide">

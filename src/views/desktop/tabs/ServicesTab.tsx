@@ -375,8 +375,13 @@ export const ServicesTab: React.FC<ServicesTabProps> = ({ onOpenQuote }) => {
                   >
                     {/* Imagen de fondo de la ruta */}
                     <img
-                      src={route.image}
+                      src={(route as any).originalImage || route.image}
                       alt={route.title}
+                      style={{
+                        objectPosition: (route as any).imagePosition || '50% 50%',
+                        transform: (route as any).imageScale && (route as any).imageScale > 1 ? `scale(${(route as any).imageScale})` : undefined,
+                        transformOrigin: (route as any).imagePosition || '50% 50%',
+                      }}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
 
@@ -724,9 +729,13 @@ export const ServicesTab: React.FC<ServicesTabProps> = ({ onOpenQuote }) => {
 
                 <div className="mt-4 -mx-7 -mb-7 overflow-hidden">
                   <img
-                    src={fleet.image}
+                    src={(fleet as any).originalImage || fleet.image}
                     alt={fleet.title}
-                    style={{ objectPosition: fleet.imagePosition || '50% 50%' }}
+                    style={{
+                      objectPosition: fleet.imagePosition || '50% 50%',
+                      transform: (fleet as any).imageScale && (fleet as any).imageScale > 1 ? `scale(${(fleet as any).imageScale})` : undefined,
+                      transformOrigin: fleet.imagePosition || '50% 50%',
+                    }}
                     className="w-full h-auto object-contain object-left block transform group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>

@@ -5,7 +5,9 @@
 
 export interface CMSMediaItem {
   image: string;
+  originalImage?: string;
   imagePosition?: string;
+  imageScale?: number;
   videoUrl?: string;
   mediaType?: 'image' | 'video';
 }

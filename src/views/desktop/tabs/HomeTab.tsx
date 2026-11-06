@@ -757,8 +757,13 @@ export const HomeTab: React.FC<HomeTabProps> = ({ setActiveTab, onOpenQuote }) =
                 {/* Imagen con Badges e Hito Icónico */}
                 <div className="h-48 sm:h-52 overflow-hidden relative">
                   <img
-                    src={dest.image}
+                    src={(dest as any).originalImage || dest.image}
                     alt={dest.name}
+                    style={{
+                      objectPosition: (dest as any).imagePosition || '50% 50%',
+                      transform: (dest as any).imageScale && (dest as any).imageScale > 1 ? `scale(${(dest as any).imageScale})` : undefined,
+                      transformOrigin: (dest as any).imagePosition || '50% 50%',
+                    }}
                     className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/5" />
