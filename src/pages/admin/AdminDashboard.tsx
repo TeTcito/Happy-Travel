@@ -4,7 +4,6 @@ import { useCMS } from '../../context/CMSContext';
 import { saveModulesToSupabase } from '../../lib/supabase';
 import { AdminSidebar, type AdminModuleTab } from '../../components/admin/AdminSidebar';
 import { AdminProfileSection } from '../../components/admin/AdminProfileSection';
-import { AdminDatabaseSection } from '../../components/admin/AdminDatabaseSection';
 import { AdminMediaUploader } from '../../components/admin/AdminMediaUploader';
 import { AdminSaveModal, type SaveModalState } from '../../components/admin/AdminSaveModal';
 import type {
@@ -16,6 +15,7 @@ import type {
 } from '../../types/cms';
 import {
   ArrowLeft,
+  ArrowRight,
   ExternalLink,
   Plus,
   Pencil,
@@ -24,16 +24,14 @@ import {
   X,
   Save,
   Compass,
-  Route as RouteIcon,
-  Building2,
   Car,
-  Package,
   FileText,
   MapPin,
   Shield,
   ArrowUpRight,
   Eye,
-  Database,
+  Clock,
+  Briefcase,
 } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
@@ -556,19 +554,6 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2.5">
-            <button
-              type="button"
-              onClick={() => setActiveTab('database')}
-              className={`px-3.5 py-2 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-                activeTab === 'database'
-                  ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50'
-                  : 'bg-white/10 hover:bg-white/15 text-slate-200 border-[#B8860B]/35'
-              }`}
-            >
-              <Database className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Base de Datos (Supabase)</span>
-            </button>
-
             <a
               href={previewLink.hash}
               target="_blank"
@@ -635,11 +620,6 @@ export const AdminDashboard: React.FC = () => {
           {activeTab === 'profile' && <AdminProfileSection />}
 
           {/* ===============================================================
-              MÓDULO: BASE DE DATOS Y SUPABASE
-             =============================================================== */}
-          {activeTab === 'database' && <AdminDatabaseSection />}
-
-          {/* ===============================================================
               MÓDULO 1: DESTINOS POPULARES EN ECUADOR
              =============================================================== */}
           {activeTab === 'destinos-populares' && (
@@ -649,16 +629,9 @@ export const AdminDashboard: React.FC = () => {
                 <div className="space-y-[15px]">
                   <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                      <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[#B8860B]/15 text-[#92400E] text-[11px] font-bold uppercase tracking-wider mb-1.5">
-                        <Compass className="w-3.5 h-3.5" />
-                        <span>Página: Inicio · Carrusel Destinos Populares en Ecuador</span>
-                      </div>
                       <h2 className="font-display font-extrabold text-xl sm:text-2xl text-slate-900">
                         Destinos Populares ({popularDestinations.length})
                       </h2>
-                      <p className="text-xs text-slate-500 mt-0.5">
-                        &quot;Conduce hacia tu Próxima Aventura&quot;. Seleccione una tarjeta para editar o agregue un nuevo destino.
-                      </p>
                     </div>
                     <button
                       type="button"
@@ -891,38 +864,63 @@ export const AdminDashboard: React.FC = () => {
                         <div className="flex items-center gap-2 pb-2 border-b border-slate-200 mb-3">
                           <Eye className="w-4 h-4 text-[#B8860B]" />
                           <h3 className="font-bold text-xs sm:text-sm uppercase text-slate-900">
-                            3. Vista Previa en el Carrusel
+                            3. Vista Previa en la Web
                           </h3>
                         </div>
 
-                        {/* Tarjeta idéntica a HomeTab */}
-                        <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-black aspect-[4/3] group">
-                          <img
-                            src={editingDest?.originalImage || editingDest?.image || '/destinations/manta-skyline-coastal.webp'}
-                            alt={editingDest?.name}
-                            style={{
-                              objectPosition: editingDest?.imagePosition || '50% 50%',
-                              transform: editingDest?.imageScale && editingDest.imageScale > 1 ? `scale(${editingDest.imageScale})` : undefined,
-                              transformOrigin: editingDest?.imagePosition || '50% 50%',
-                            }}
-                            className="w-full h-full object-cover transition-transform duration-150"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                          <div className="absolute top-3 left-3">
-                            <span className="px-2.5 py-1 rounded-full bg-amber-500 text-black text-[10px] font-extrabold uppercase tracking-wider">
-                              {editingDest?.tag || 'Destino'}
-                            </span>
-                          </div>
-                          <div className="absolute bottom-3 left-3 right-3 text-white">
-                            <span className="text-[10px] text-amber-300 font-bold uppercase tracking-wider block">
-                              {editingDest?.province || 'Ecuador'}
-                            </span>
-                            <h4 className="font-display font-extrabold text-xl text-white">
-                              {editingDest?.name || 'Nombre del Destino'}
-                            </h4>
-                            <p className="text-[11px] text-slate-200 mt-1 line-clamp-2">
-                              {editingDest?.description}
-                            </p>
+                        {/* Tarjeta con dimensiones y diseño idénticos a HomeTab */}
+                        <div className="bg-slate-50/70 p-3 sm:p-4 rounded-2xl border border-slate-200/80 flex items-center justify-center">
+                          <div className="w-full max-w-[340px] bg-white border border-slate-200/90 rounded-3xl overflow-hidden shadow-sm flex flex-col">
+                            {/* Imagen con Badges e Hito Icónico */}
+                            <div className="h-52 overflow-hidden relative bg-black">
+                              <img
+                                src={editingDest?.originalImage || editingDest?.image || '/destinations/manta-skyline-coastal.webp'}
+                                alt={editingDest?.name}
+                                style={{
+                                  objectPosition: editingDest?.imagePosition || '50% 50%',
+                                  transform: editingDest?.imageScale && editingDest.imageScale > 1 ? `scale(${editingDest.imageScale})` : undefined,
+                                  transformOrigin: editingDest?.imagePosition || '50% 50%',
+                                }}
+                                className="w-full h-full object-cover transition-transform duration-150"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/5" />
+
+                              {/* Badge Superior Derecho: Provincia */}
+                              <div className="absolute top-3.5 right-3.5">
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-white/95 backdrop-blur-md text-slate-800 border border-white/60 shadow-sm">
+                                  <MapPin className="w-3 h-3 text-amber-600" />
+                                  {editingDest?.province || 'Ecuador'}
+                                </span>
+                              </div>
+
+                              {/* Nombre de la Ciudad e Hito Icónico */}
+                              <div className="absolute bottom-3.5 left-4 right-4">
+                                <h3 className="font-display text-xl sm:text-2xl font-black text-white tracking-tight drop-shadow-md">
+                                  {editingDest?.name || 'Nombre del Destino'}
+                                </h3>
+                                <div className="flex items-center gap-1.5 text-amber-300 text-xs font-semibold mt-0.5 drop-shadow-sm truncate">
+                                  <Compass className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+                                  <span className="truncate">{editingDest?.iconicHighlight || 'Hito Icónico'}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Contenido con Descripción y Botón */}
+                            <div className="p-5 flex flex-col flex-1 justify-between gap-4 bg-white">
+                              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal line-clamp-3">
+                                {editingDest?.description || 'Descripción del destino turístico...'}
+                              </p>
+
+                              {/* Botón de Acción / CTA */}
+                              <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between mt-auto">
+                                <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                                  Cotizar Traslado
+                                </span>
+                                <div className="w-8 h-8 rounded-full bg-amber-50 text-amber-800 flex items-center justify-center shadow-xs border border-amber-200/60">
+                                  <ArrowRight className="w-3.5 h-3.5" />
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -951,16 +949,9 @@ export const AdminDashboard: React.FC = () => {
                 <div className="space-y-[15px]">
                   <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                      <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[#F59E0B]/20 text-[#92400E] text-[11px] font-bold uppercase tracking-wider mb-1.5">
-                        <RouteIcon className="w-3.5 h-3.5" />
-                        <span>Página: Servicios · Carrusel Rutas Más Populares con Costos</span>
-                      </div>
                       <h2 className="font-display font-extrabold text-xl sm:text-2xl text-slate-900">
                         Rutas Más Populares ({popularRoutes.length})
                       </h2>
-                      <p className="text-xs text-slate-500 mt-0.5">
-                        &quot;Trayectos puerta a puerta más elegidos por nuestros clientes con tarifas referenciales&quot;.
-                      </p>
                     </div>
                     <button
                       type="button"
@@ -1227,43 +1218,54 @@ export const AdminDashboard: React.FC = () => {
                         <div className="flex items-center gap-2 pb-2 border-b border-slate-200 mb-3">
                           <Eye className="w-4 h-4 text-[#B8860B]" />
                           <h3 className="font-bold text-xs sm:text-sm uppercase text-slate-900">
-                            3. Vista Previa en Servicios
+                            3. Vista Previa en la Web
                           </h3>
                         </div>
 
-                        {/* Tarjeta idéntica a ServicesTab */}
-                        <div className="relative h-[320px] rounded-[22px] overflow-hidden shadow-md border border-slate-900/10 group bg-black">
-                          <img
-                            src={editingRoute?.originalImage || editingRoute?.image || 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Vista_cerro_santa_ana.jpg/1280px-Vista_cerro_santa_ana.jpg'}
-                            alt={editingRoute?.title}
-                            style={{
-                              objectPosition: editingRoute?.imagePosition || '50% 50%',
-                              transform: editingRoute?.imageScale && editingRoute.imageScale > 1 ? `scale(${editingRoute.imageScale})` : undefined,
-                              transformOrigin: editingRoute?.imagePosition || '50% 50%',
-                            }}
-                            className="w-full h-full object-cover transition-transform duration-150"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/20" />
-                          <div className="absolute top-3.5 left-3.5">
-                            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-black/60 text-[#F59E0B] border border-[#B8860B]/30">
-                              {editingRoute?.duration || 'Ruta Directa'}
-                            </span>
-                          </div>
-                          <div className="absolute top-3.5 right-3.5">
-                            <span className="px-3 py-1 rounded-xl text-xs font-black bg-emerald-500 text-white shadow">
-                              {editingRoute?.price || 'Tarifa'}
-                            </span>
-                          </div>
-                          <div className="absolute bottom-4 left-4 right-4 text-white">
-                            <h4 className="font-serif italic font-bold text-2xl text-white">
-                              {editingRoute?.title || 'Ruta'}
-                            </h4>
-                            <p className="text-xs text-amber-200 mt-1 font-medium">
-                              {editingRoute?.vehicleType}
-                            </p>
-                            <p className="text-[11px] text-slate-300 mt-0.5">
-                              {editingRoute?.included}
-                            </p>
+                        {/* Tarjeta con dimensiones y diseño idénticos a ServicesTab */}
+                        <div className="bg-slate-50/70 p-3 sm:p-4 rounded-2xl border border-slate-200/80 flex items-center justify-center">
+                          <div className="relative w-full max-w-[300px] h-[360px] rounded-[22px] overflow-hidden shadow-md border border-slate-900/10 bg-black">
+                            {/* Imagen de fondo de la ruta */}
+                            <img
+                              src={editingRoute?.originalImage || editingRoute?.image || 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Vista_cerro_santa_ana.jpg/1280px-Vista_cerro_santa_ana.jpg'}
+                              alt={editingRoute?.title}
+                              style={{
+                                objectPosition: editingRoute?.imagePosition || '50% 50%',
+                                transform: editingRoute?.imageScale && editingRoute.imageScale > 1 ? `scale(${editingRoute.imageScale})` : undefined,
+                                transformOrigin: editingRoute?.imagePosition || '50% 50%',
+                              }}
+                              className="w-full h-full object-cover transition-transform duration-150"
+                            />
+
+                            {/* Degradado oscuro profundo */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#06080E] via-[#06080E]/80 via-45% to-transparent" />
+
+                            {/* Contenido inferior de la tarjeta */}
+                            <div className="absolute inset-0 p-4 sm:p-5 flex flex-col justify-end text-white z-10">
+                              <h3 className="font-serif italic text-lg sm:text-[19px] xl:text-[21px] font-bold text-white leading-tight mb-2.5 whitespace-nowrap truncate drop-shadow-sm">
+                                {editingRoute?.title || 'Ruta'}
+                              </h3>
+
+                              <div className="space-y-1 text-[11px] text-slate-200/95 mb-3.5">
+                                <div className="flex items-center gap-2">
+                                  <Clock className="w-3 h-3 text-[#DFC29D] shrink-0" />
+                                  <span className="truncate">{editingRoute?.duration || 'Ruta Directa'}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Car className="w-3 h-3 text-[#DFC29D] shrink-0" />
+                                  <span className="truncate">{editingRoute?.vehicleType || 'SUV / Van Ejecutiva VIP'}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Briefcase className="w-3 h-3 text-[#DFC29D] shrink-0" />
+                                  <span className="truncate">{editingRoute?.included || 'Equipaje y Peajes Incluidos'}</span>
+                                </div>
+                              </div>
+
+                              {/* Botón píldora con el costo de la ruta */}
+                              <div className="w-full py-2 rounded-full font-bold text-xs tracking-wide text-[#080A0E] bg-gradient-to-r from-[#DFC29D] via-[#D5B895] to-[#C4A47C] shadow-[0_4px_15px_rgba(213,184,149,0.3)] flex items-center justify-center">
+                                {editingRoute?.price || 'Tarifa'}
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1292,16 +1294,9 @@ export const AdminDashboard: React.FC = () => {
                 <div className="space-y-[15px]">
                   <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                      <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[#B8860B]/15 text-[#92400E] text-[11px] font-bold uppercase tracking-wider mb-1.5">
-                        <Building2 className="w-3.5 h-3.5" />
-                        <span>Página: Servicios · Destinos Más Visitados (Grilla &amp; Carrusel Móvil)</span>
-                      </div>
                       <h2 className="font-display font-extrabold text-xl sm:text-2xl text-slate-900">
                         Destinos Más Visitados ({visitedDestinations.length})
                       </h2>
-                      <p className="text-xs text-slate-500 mt-0.5">
-                        &quot;Explora las ciudades icónicas del Ecuador que nuestros clientes más visitan&quot;.
-                      </p>
                     </div>
                     <button
                       type="button"
@@ -1499,29 +1494,37 @@ export const AdminDashboard: React.FC = () => {
                         <div className="flex items-center gap-2 pb-2 border-b border-slate-200 mb-3">
                           <Eye className="w-4 h-4 text-[#B8860B]" />
                           <h3 className="font-bold text-xs sm:text-sm uppercase text-slate-900">
-                            3. Vista Previa
+                            3. Vista Previa en la Web
                           </h3>
                         </div>
 
-                        <div className="relative aspect-square rounded-[22px] overflow-hidden shadow-md bg-black group">
-                          <img
-                            src={editingVisDest?.originalImage || editingVisDest?.image || 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Quito_as_from_panecillo_Basilica.jpg/1280px-Quito_as_from_panecillo_Basilica.jpg'}
-                            alt={editingVisDest?.name}
-                            style={{
-                              objectPosition: editingVisDest?.imagePosition || '50% 50%',
-                              transform: editingVisDest?.imageScale && editingVisDest.imageScale > 1 ? `scale(${editingVisDest.imageScale})` : undefined,
-                              transformOrigin: editingVisDest?.imagePosition || '50% 50%',
-                            }}
-                            className="w-full h-full object-cover transition-transform duration-150"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-                          <div className="absolute bottom-4 left-4 right-4 text-white">
-                            <h4 className="font-serif italic text-2xl font-bold leading-tight">
-                              {editingVisDest?.name || 'Ciudad'}
-                            </h4>
-                            <div className="flex items-center gap-1.5 text-xs text-amber-300 font-medium mt-1">
-                              <MapPin className="w-3.5 h-3.5 shrink-0" />
-                              <span>{editingVisDest?.province}</span>
+                        {/* Tarjeta con dimensiones y diseño idénticos a ServicesTab */}
+                        <div className="bg-slate-50/70 p-3 sm:p-4 rounded-2xl border border-slate-200/80 flex items-center justify-center">
+                          <div className="relative w-full max-w-[280px] h-[280px] rounded-[22px] overflow-hidden shadow-md bg-black">
+                            <img
+                              src={editingVisDest?.originalImage || editingVisDest?.image || 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Quito_as_from_panecillo_Basilica.jpg/1280px-Quito_as_from_panecillo_Basilica.jpg'}
+                              alt={editingVisDest?.name}
+                              style={{
+                                objectPosition: editingVisDest?.imagePosition || '50% 50%',
+                                transform: editingVisDest?.imageScale && editingVisDest.imageScale > 1 ? `scale(${editingVisDest.imageScale})` : undefined,
+                                transformOrigin: editingVisDest?.imagePosition || '50% 50%',
+                              }}
+                              className="w-full h-full object-cover transition-transform duration-150"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#06080E]/90 via-[#06080E]/25 to-transparent" />
+                            <div className="absolute bottom-4 left-4 right-4 text-white z-10">
+                              <h3 className="font-serif italic text-xl sm:text-[22px] font-bold leading-tight whitespace-nowrap truncate drop-shadow-md">
+                                {editingVisDest?.name || 'Ciudad'}
+                              </h3>
+                              <div className="flex items-center gap-1.5 text-[11px] text-white/90 font-medium mt-0.5">
+                                <MapPin className="w-3 h-3 text-[#DFC29D] shrink-0" />
+                                <span className="truncate">{editingVisDest?.province || 'Ecuador'}</span>
+                              </div>
+                              {editingVisDest?.description && (
+                                <p className="text-[10px] text-slate-300 line-clamp-2 mt-1">
+                                  {editingVisDest.description}
+                                </p>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -1551,16 +1554,9 @@ export const AdminDashboard: React.FC = () => {
                 <div className="space-y-[15px]">
                   <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                      <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-wider mb-1.5">
-                        <Car className="w-3.5 h-3.5" />
-                        <span>Página: Servicios · Categorías de la Flota (3 Tarjetas)</span>
-                      </div>
                       <h2 className="font-display font-extrabold text-xl sm:text-2xl text-slate-900">
                         Categorías de la Flota ({fleetClasses.length})
                       </h2>
-                      <p className="text-xs text-slate-500 mt-0.5">
-                        Clase Ejecutiva, Clase Premium y Clase de Lujo con sus especificaciones e imágenes.
-                      </p>
                     </div>
                     <button
                       type="button"
@@ -1760,31 +1756,38 @@ export const AdminDashboard: React.FC = () => {
                         <div className="flex items-center gap-2 pb-2 border-b border-slate-200 mb-3">
                           <Eye className="w-4 h-4 text-[#B8860B]" />
                           <h3 className="font-bold text-xs sm:text-sm uppercase text-slate-900">
-                            3. Vista Previa en Servicios
+                            3. Vista Previa en la Web
                           </h3>
                         </div>
 
-                        {/* Tarjeta idéntica a ServicesTab */}
-                        <div className="bg-white border border-slate-200/90 rounded-[14px] p-6 shadow-clean-sm flex flex-col justify-between overflow-hidden">
-                          <div>
-                            <h3 className="font-sans font-bold text-slate-900 text-xl tracking-tight">
-                              {editingFleet?.title || 'Clase Ejecutiva'}
-                            </h3>
-                            <p className="text-xs sm:text-[13px] text-slate-500 mt-1 font-normal">
-                              {editingFleet?.subtitle || 'Para ejecutivos'}
-                            </p>
-                          </div>
-                          <div className="mt-4 -mx-6 -mb-6 overflow-hidden">
-                            <img
-                              src={editingFleet?.originalImage || editingFleet?.image || '/fleet/class_business.jpg'}
-                              alt={editingFleet?.title}
-                              style={{
-                                objectPosition: editingFleet?.imagePosition || '50% 50%',
-                                transform: editingFleet?.imageScale && editingFleet.imageScale > 1 ? `scale(${editingFleet.imageScale})` : undefined,
-                                transformOrigin: editingFleet?.imagePosition || '50% 50%',
-                              }}
-                              className="w-full h-auto object-contain object-left block transition-transform duration-150"
-                            />
+                        {/* Tarjeta con dimensiones y diseño idénticos a ServicesTab */}
+                        <div className="bg-slate-50/70 p-3 sm:p-4 rounded-2xl border border-slate-200/80 flex items-center justify-center">
+                          <div className="w-full max-w-[340px] bg-white border border-slate-200/90 rounded-[14px] p-6 sm:p-7 shadow-clean-sm flex flex-col justify-between overflow-hidden">
+                            <div>
+                              <h3 className="font-sans font-bold text-slate-900 text-xl tracking-tight">
+                                {editingFleet?.title || 'Clase Ejecutiva'}
+                              </h3>
+                              <p className="text-xs sm:text-[13px] text-slate-500 mt-1 font-normal">
+                                {editingFleet?.subtitle || 'Para ejecutivos'}
+                              </p>
+                              {editingFleet?.description && (
+                                <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">
+                                  {editingFleet.description}
+                                </p>
+                              )}
+                            </div>
+                            <div className="mt-4 -mx-7 -mb-7 overflow-hidden bg-slate-50">
+                              <img
+                                src={editingFleet?.originalImage || editingFleet?.image || '/fleet/class_business.jpg'}
+                                alt={editingFleet?.title}
+                                style={{
+                                  objectPosition: editingFleet?.imagePosition || '50% 50%',
+                                  transform: editingFleet?.imageScale && editingFleet.imageScale > 1 ? `scale(${editingFleet.imageScale})` : undefined,
+                                  transformOrigin: editingFleet?.imagePosition || '50% 50%',
+                                }}
+                                className="w-full h-44 object-contain object-left block transition-transform duration-150"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1813,16 +1816,9 @@ export const AdminDashboard: React.FC = () => {
                 <div className="space-y-[15px]">
                   <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                      <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[11px] font-bold uppercase tracking-wider mb-1.5">
-                        <Package className="w-3.5 h-3.5 text-[#E11438]" />
-                        <span>Página: Encomiendas · Carrusel de Modalidades Disponibles</span>
-                      </div>
                       <h2 className="font-display font-extrabold text-xl sm:text-2xl text-slate-900">
                         Servicios de Encomienda y Carga ({parcelServices.length})
                       </h2>
-                      <p className="text-xs text-slate-500 mt-0.5">
-                        &quot;Modalidades Disponibles&quot;. Encomiendas en tu mismo viaje, envío exclusivo puerta a puerta, documentación y carga.
-                      </p>
                     </div>
                     <button
                       type="button"
@@ -2024,41 +2020,46 @@ export const AdminDashboard: React.FC = () => {
                         <div className="flex items-center gap-2 pb-2 border-b border-slate-200 mb-3">
                           <Eye className="w-4 h-4 text-[#E11438]" />
                           <h3 className="font-bold text-xs sm:text-sm uppercase text-slate-900">
-                            3. Vista Previa en Encomiendas
+                            3. Vista Previa en la Web
                           </h3>
                         </div>
 
-                        {/* Tarjeta idéntica a ParcelsTab */}
-                        <div className="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-200/80 flex flex-col justify-between">
-                          <div>
-                            <div className="w-full h-44 rounded-2xl overflow-hidden mb-3 relative bg-slate-100">
-                              <img
-                                src={editingParcel?.originalImage || editingParcel?.image || '/parcels/parcel-cargo-trunk.jpg'}
-                                alt={editingParcel?.title}
-                                style={{
-                                  objectPosition: editingParcel?.imagePosition || '50% 50%',
-                                  transform: editingParcel?.imageScale && editingParcel.imageScale > 1 ? `scale(${editingParcel.imageScale})` : undefined,
-                                  transformOrigin: editingParcel?.imagePosition || '50% 50%',
-                                }}
-                                className="w-full h-full object-cover transition-transform duration-150"
-                              />
-                              <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-lg bg-black/75 text-white text-[10px] font-bold">
-                                {editingParcel?.tag || 'Tag'}
+                        {/* Tarjeta con dimensiones y diseño idénticos a ParcelsTab */}
+                        <div className="bg-slate-50/70 p-3 sm:p-4 rounded-2xl border border-slate-200/80 flex items-center justify-center">
+                          <div className="w-full max-w-[340px] bg-white rounded-[2rem] p-5 sm:p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between">
+                            <div>
+                              <div className="w-full h-44 sm:h-48 rounded-2xl overflow-hidden mb-4 relative bg-slate-100">
+                                <img
+                                  src={editingParcel?.originalImage || editingParcel?.image || '/parcels/parcel-cargo-trunk.jpg'}
+                                  alt={editingParcel?.title}
+                                  style={{
+                                    objectPosition: editingParcel?.imagePosition || '50% 50%',
+                                    transform: editingParcel?.imageScale && editingParcel.imageScale > 1 ? `scale(${editingParcel.imageScale})` : undefined,
+                                    transformOrigin: editingParcel?.imagePosition || '50% 50%',
+                                  }}
+                                  className="w-full h-full object-cover transition-transform duration-150"
+                                />
+                                <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-md text-white text-[10px] font-bold tracking-wide">
+                                  {editingParcel?.tag || 'Modalidad'}
+                                </span>
+                              </div>
+                              <span className="text-[11px] font-bold text-[#E11438] uppercase tracking-wider block mb-1">
+                                {editingParcel?.category || 'Categoría'}
                               </span>
+                              <h3 className="font-display font-extrabold text-lg sm:text-xl text-slate-900">
+                                {editingParcel?.title || 'Título del Servicio'}
+                              </h3>
+                              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mt-2.5 font-normal line-clamp-3">
+                                {editingParcel?.description || 'Descripción del servicio de encomienda...'}
+                              </p>
                             </div>
-                            <span className="text-[10px] font-bold text-[#E11438] uppercase tracking-wider block mb-1">
-                              {editingParcel?.category || 'Categoría'}
-                            </span>
-                            <h3 className="font-display font-extrabold text-base text-slate-900">
-                              {editingParcel?.title || 'Título'}
-                            </h3>
-                            <p className="text-xs text-slate-600 line-clamp-3 mt-2">
-                              {editingParcel?.description}
-                            </p>
-                          </div>
-                          <div className="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-[#E11438] font-bold">
-                            <span>Cotizar Ahora</span>
-                            <ArrowUpRight className="w-4 h-4" />
+                            <div className="pt-5 mt-4 border-t border-slate-100 flex items-center justify-between">
+                              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#E11438]">
+                                <span>Cotizar Ahora</span>
+                                <ArrowUpRight className="w-4 h-4" />
+                              </div>
+                              <span className="text-[10px] text-slate-400 font-mono font-medium">100% Puerta a Puerta</span>
+                            </div>
                           </div>
                         </div>
                       </div>

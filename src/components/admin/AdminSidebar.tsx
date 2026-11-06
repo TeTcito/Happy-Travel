@@ -14,7 +14,6 @@ import {
   Menu,
   X,
   ChevronRight,
-  Database,
 } from 'lucide-react';
 
 export type AdminModuleTab =
@@ -23,8 +22,7 @@ export type AdminModuleTab =
   | 'rutas-populares'
   | 'destinos-visitados'
   | 'flota-clases'
-  | 'encomiendas-servicios'
-  | 'database';
+  | 'encomiendas-servicios';
 
 interface AdminSidebarProps {
   activeTab: AdminModuleTab;
@@ -103,14 +101,6 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       icon: Package,
       badge: counts.encomiendasServicios,
       badgeColor: 'bg-[#E11438] text-white',
-    },
-    {
-      id: 'database',
-      label: 'Base de Datos (Supabase)',
-      description: 'Estado, vinculación y sincronización de tablas',
-      icon: Database,
-      badge: 'En Línea',
-      badgeColor: 'bg-emerald-500 text-white',
     },
   ];
 
