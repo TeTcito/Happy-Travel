@@ -12,9 +12,7 @@ import {
   ArrowRight,
   AlertCircle,
   Loader2,
-  CheckCircle2,
   KeyRound,
-  Sparkles,
 } from 'lucide-react';
 
 export const AdminLogin: React.FC = () => {
@@ -223,79 +221,14 @@ export const AdminLogin: React.FC = () => {
       {/* =================================================================
           PANEL DERECHO (3/4 DEL ESPACIO - 75%): ESCAPARATE VISUAL
          ================================================================= */}
-      <div className="hidden lg:flex lg:w-3/4 relative bg-[#080A0E] items-center justify-center p-12 overflow-hidden">
-        {/* Imagen de fondo con overlay elegante */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/hero-suv.webp"
-            alt="Happy Travel Ecuador Transporte Ejecutivo"
-            className="w-full h-full object-cover opacity-30 scale-105 transition-transform duration-1000"
-          />
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#080A0E] via-[#080A0E]/85 to-[#1C2232]/70" />
-        </div>
-
-        {/* Luces decorativas */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#B8860B]/15 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
-
-        {/* Contenido central en los 3/4 */}
-        <div className="relative z-10 max-w-3xl w-full text-white space-y-8">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-[#B8860B]/30 text-[#F59E0B] text-xs font-bold uppercase tracking-widest">
-            <Sparkles className="w-4 h-4 text-[#F59E0B]" />
-            <span>Sistema de Gestión de Contenidos &amp; Carruseles</span>
-          </div>
-
-          <h2 className="font-display font-extrabold text-4xl xl:text-5xl leading-tight tracking-tight text-white">
-            Control total de sus{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F59E0B] via-[#FBBF24] to-[#B8860B] italic">
-              Destinos, Rutas con Tarifas, Flota y Encomiendas
-            </span>{' '}
-            en tiempo real.
-          </h2>
-
-          <p className="text-slate-300 text-base xl:text-lg leading-relaxed max-w-2xl">
-            Administre desde un solo lugar las tarjetas de cada carrusel, suba fotografías optimizadas automáticamente a formato WebP, acomode encuadres y actualice la información que sus clientes ven en la web.
-          </p>
-
-          {/* Tarjetas de módulos incluidos */}
-          <div className="grid grid-cols-3 gap-5 pt-4">
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:border-[#B8860B]/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-[#B8860B]/20 text-[#F59E0B] flex items-center justify-center mb-3 font-bold">
-                <CheckCircle2 className="w-5 h-5" />
-              </div>
-              <h3 className="font-sans font-bold text-sm uppercase text-white mb-1">
-                Destinos &amp; Rutas
-              </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Carruseles de Destinos Populares en Ecuador y Rutas con tarifas referenciales y tiempos.
-              </p>
-            </div>
-
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:border-[#B8860B]/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-[#B8860B]/20 text-[#F59E0B] flex items-center justify-center mb-3 font-bold">
-                <CheckCircle2 className="w-5 h-5" />
-              </div>
-              <h3 className="font-sans font-bold text-sm uppercase text-white mb-1">
-                Nuestra Flota VIP
-              </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Edite las 3 categorías: Clase Ejecutiva, Clase Premium y Clase de Lujo con sus imágenes y detalles.
-              </p>
-            </div>
-
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 hover:border-[#B8860B]/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-[#B8860B]/20 text-[#F59E0B] flex items-center justify-center mb-3 font-bold">
-                <CheckCircle2 className="w-5 h-5" />
-              </div>
-              <h3 className="font-sans font-bold text-sm uppercase text-white mb-1">
-                Servicios de Encomienda
-              </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Gestione las 4 tarjetas del carrusel de modalidades de encomiendas y carga privada puerta a puerta.
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className="hidden lg:block lg:w-3/4 relative bg-[#080A0E] overflow-hidden">
+        <img
+          src="/admin-login-hero.jpg"
+          alt="Happy Travel Ecuador - Transporte Privado Ejecutivo"
+          className="w-full h-full object-cover object-center"
+        />
+        {/* Sutil viñeta degradada hacia el panel izquierdo para integración refinada */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/20 pointer-events-none" />
       </div>
     </div>
   );
