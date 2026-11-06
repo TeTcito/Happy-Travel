@@ -16,7 +16,6 @@ import type {
 import {
   ArrowLeft,
   ArrowRight,
-  ExternalLink,
   Plus,
   Pencil,
   Trash2,
@@ -488,24 +487,6 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
-  // Enlace contextual de previsualización según la pestaña activa
-  const getModulePreviewRoute = (): { hash: string; label: string } => {
-    switch (activeTab) {
-      case 'destinos-populares':
-        return { hash: '/#inicio', label: 'Ver Carrusel en Inicio' };
-      case 'rutas-populares':
-      case 'destinos-visitados':
-      case 'flota-clases':
-        return { hash: '/#servicios', label: 'Ver en Página de Servicios' };
-      case 'encomiendas-servicios':
-        return { hash: '/#encomiendas', label: 'Ver en Página de Encomiendas' };
-      default:
-        return { hash: '/', label: 'Ver Sitio Web' };
-    }
-  };
-
-  const previewLink = getModulePreviewRoute();
-
   return (
     <div className="h-screen bg-[#F5F2EB] flex flex-col md:flex-row font-sans text-slate-900 overflow-hidden">
       {/* =================================================================
@@ -540,38 +521,14 @@ export const AdminDashboard: React.FC = () => {
          ================================================================= */}
       <div className="flex-1 min-w-0 flex flex-col h-full overflow-hidden">
         {/* BARRA SUPERIOR FIJA */}
-        <header className="shrink-0 z-20 bg-[#080A0E] text-white border-b border-[#B8860B]/30 px-5 sm:px-8 py-3.5 shadow-md flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-widest text-[#F59E0B] block">
-                Administración Happy Travel · Sincronización Activa
-              </span>
-              <span className="text-xs text-slate-300 hidden sm:block">
-                Todos los cambios se reflejan inmediatamente en el sitio web y en la nube.
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2.5">
-            <a
-              href={previewLink.hash}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-[#F59E0B] border border-[#B8860B]/35 text-xs font-bold flex items-center gap-1.5 transition-all"
-            >
-              <ExternalLink className="w-3.5 h-3.5" />
-              <span>{previewLink.label}</span>
-            </a>
-
-            <Link
-              to="/"
-              className="px-4 py-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] text-black font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-sm transition-all"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Regresar al Sitio Web</span>
-            </Link>
-          </div>
+        <header className="shrink-0 z-20 bg-[#080A0E] text-white border-b border-[#B8860B]/30 px-5 sm:px-8 py-3.5 shadow-md flex items-center justify-end">
+          <Link
+            to="/"
+            className="px-4 py-2 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] text-black font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-sm transition-all"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Regresar al Sitio Web</span>
+          </Link>
         </header>
 
         {/* NOTIFICACIÓN FLOTANTE TOAST */}

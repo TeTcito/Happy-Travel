@@ -41,12 +41,8 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
   setActiveTab,
   counts,
 }) => {
-  const { profile, signOut } = useAuth();
+  const { signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const displayName = profile?.first_name
-    ? `${profile.first_name} ${profile.last_name || ''}`.trim()
-    : 'Administración Happy Travel';
 
   const menuItems: {
     id: AdminModuleTab;
@@ -137,17 +133,15 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
-        {/* PARTE SUPERIOR: Identidad corporativa y perfil */}
-        <div className="p-5 border-b border-white/10 space-y-4">
+        {/* PARTE SUPERIOR: Identidad corporativa */}
+        <div className="p-5 border-b border-white/10">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#B8860B] to-[#F59E0B] p-0.5 flex items-center justify-center shadow-md">
-                <div className="w-full h-full bg-[#080A0E] rounded-[10px] flex items-center justify-center">
-                  <span className="font-display font-extrabold text-[#F59E0B] text-base tracking-wider">
-                    HT
-                  </span>
-                </div>
-              </div>
+              <img
+                src="/logo-transparent.png"
+                alt="Happy Travel Logo"
+                className="h-10 w-auto object-contain drop-shadow-[0_2px_8px_rgba(245,158,11,0.25)] shrink-0"
+              />
               <div>
                 <span className="font-display font-black text-base tracking-tight text-white block group-hover:text-[#F59E0B] transition-colors leading-none">
                   Happy Travel
@@ -166,21 +160,6 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
             >
               <X className="w-5 h-5" />
             </button>
-          </div>
-
-          {/* Tarjeta del Administrador en sesión */}
-          <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#B8860B]/20 border border-[#B8860B]/40 flex items-center justify-center text-[#F59E0B] font-bold text-sm shrink-0">
-              {displayName.charAt(0).toUpperCase()}
-            </div>
-            <div className="min-w-0 flex-1">
-              <span className="text-xs font-bold text-white block truncate">
-                {displayName}
-              </span>
-              <span className="text-[10px] text-slate-400 block truncate">
-                admin@happytravel.com
-              </span>
-            </div>
           </div>
         </div>
 
