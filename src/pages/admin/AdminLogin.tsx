@@ -81,13 +81,11 @@ export const AdminLogin: React.FC = () => {
         {/* Cuerpo Central del Formulario */}
         <div className="my-auto py-6">
           <div className="inline-flex items-center gap-3 mb-6 bg-[#080A0E] p-3.5 rounded-2xl shadow-lg border border-[#B8860B]/40 w-full">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#B8860B] to-[#F59E0B] p-0.5 flex items-center justify-center shrink-0">
-              <div className="w-full h-full bg-[#080A0E] rounded-[10px] flex items-center justify-center">
-                <span className="font-display font-black text-[#F59E0B] text-lg tracking-wider">
-                  HT
-                </span>
-              </div>
-            </div>
+            <img
+              src="/logo-transparent.png"
+              alt="Happy Travel Logo"
+              className="h-11 w-auto object-contain drop-shadow-[0_2px_8px_rgba(245,158,11,0.25)] shrink-0"
+            />
             <div className="border-l border-white/15 pl-3">
               <span className="font-display font-black text-base tracking-tight text-white block leading-none">
                 Happy Travel
