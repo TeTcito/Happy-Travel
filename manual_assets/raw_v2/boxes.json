@@ -1,0 +1,673 @@
+{
+  "01_inicio_hero": {
+    "img": "01_inicio_hero.png",
+    "width": 1440,
+    "height": 840,
+    "items": [
+      {
+        "num": 1,
+        "label": "Logotipo Oficial",
+        "side": "top",
+        "box": {
+          "x": 112,
+          "y": 0,
+          "w": 154,
+          "h": 80
+        }
+      },
+      {
+        "num": 2,
+        "label": "Menú de 5 Pestañas",
+        "side": "top",
+        "box": {
+          "x": 425,
+          "y": 22,
+          "w": 602,
+          "h": 36
+        }
+      },
+      {
+        "num": 3,
+        "label": "Botón Rápido Cotizar",
+        "side": "top",
+        "box": {
+          "x": 1186,
+          "y": 22,
+          "w": 142,
+          "h": 36
+        }
+      },
+      {
+        "num": 4,
+        "label": "Titular de Propuesta VIP",
+        "side": "left",
+        "box": {
+          "x": 112,
+          "y": 209,
+          "w": 672,
+          "h": 288
+        }
+      },
+      {
+        "num": 5,
+        "label": "Prueba Social (+5.000)",
+        "side": "bottom",
+        "box": {
+          "x": 112,
+          "y": 638,
+          "w": 239,
+          "h": 38
+        }
+      },
+      {
+        "num": 6,
+        "label": "Botón CTA Cotizar Viaje",
+        "side": "bottom",
+        "box": {
+          "x": 365,
+          "y": 637,
+          "w": 163.8,
+          "h": 40
+        }
+      }
+    ]
+  },
+  "02_destinos_populares": {
+    "img": "02_destinos_populares.png",
+    "width": 1440,
+    "height": 720,
+    "items": [
+      {
+        "num": 1,
+        "label": "Encabezado de Módulo",
+        "side": "top",
+        "box": {
+          "x": 112,
+          "y": 35,
+          "w": 576,
+          "h": 102
+        }
+      },
+      {
+        "num": 2,
+        "label": "Controles Carrusel (← / →)",
+        "side": "top",
+        "box": {
+          "x": 1112,
+          "y": 165,
+          "w": 216,
+          "h": 40
+        }
+      },
+      {
+        "num": 3,
+        "label": "Tarjeta Editable (CMS)",
+        "side": "left",
+        "box": {
+          "x": 112,
+          "y": 241,
+          "w": 250.7,
+          "h": 373
+        }
+      },
+      {
+        "num": 4,
+        "label": "Badge de Provincia",
+        "side": "bottom",
+        "box": {
+          "x": 543.3,
+          "y": 256,
+          "w": 75,
+          "h": 25
+        }
+      },
+      {
+        "num": 5,
+        "label": "Acción Cotizar Traslado",
+        "side": "bottom",
+        "box": {
+          "x": 674.3,
+          "y": 546,
+          "w": 208.7,
+          "h": 47
+        }
+      }
+    ]
+  },
+  "03_rutas_populares": {
+    "img": "03_rutas_populares.png",
+    "width": 1440,
+    "height": 520,
+    "items": [
+      {
+        "num": 1,
+        "label": "Cabecera Ornamental",
+        "side": "top",
+        "box": {
+          "x": 538.5,
+          "y": 4,
+          "w": 363,
+          "h": 40
+        }
+      },
+      {
+        "num": 2,
+        "label": "Flechas de Navegación",
+        "side": "top",
+        "box": {
+          "x": 1238,
+          "y": 18,
+          "w": 90,
+          "h": 40
+        }
+      },
+      {
+        "num": 3,
+        "label": "Tarjeta de Ruta VIP",
+        "side": "bottom",
+        "box": {
+          "x": 112,
+          "y": 116,
+          "w": 287,
+          "h": 365
+        }
+      },
+      {
+        "num": 4,
+        "label": "Tarifa Referencial USD",
+        "side": "bottom",
+        "box": {
+          "x": 440,
+          "y": 428,
+          "w": 245,
+          "h": 32
+        }
+      },
+      {
+        "num": 5,
+        "label": "Duración y Vehículo",
+        "side": "bottom",
+        "box": {
+          "x": 727,
+          "y": 117,
+          "w": 285,
+          "h": 363
+        }
+      }
+    ]
+  },
+  "04_flota_clases": {
+    "img": "04_flota_clases.png",
+    "width": 1440,
+    "height": 620,
+    "items": [
+      {
+        "num": 1,
+        "label": "Clase Ejecutiva (Sedán)",
+        "side": "bottom",
+        "box": {
+          "x": 112,
+          "y": 77,
+          "w": 389.3,
+          "h": 440.5
+        }
+      },
+      {
+        "num": 2,
+        "label": "Clase Premium (SUV)",
+        "side": "bottom",
+        "box": {
+          "x": 525.3,
+          "y": 77,
+          "w": 389.3,
+          "h": 440.5
+        }
+      },
+      {
+        "num": 3,
+        "label": "Clase de Lujo (VIP)",
+        "side": "bottom",
+        "box": {
+          "x": 938.7,
+          "y": 77,
+          "w": 389.3,
+          "h": 436.1
+        }
+      }
+    ]
+  },
+  "05_encomiendas": {
+    "img": "05_encomiendas.png",
+    "width": 1440,
+    "height": 740,
+    "items": [
+      {
+        "num": 1,
+        "label": "Encabezado Encomiendas",
+        "side": "top",
+        "box": {
+          "x": 155.5,
+          "y": 41,
+          "w": 700.5,
+          "h": 80
+        }
+      },
+      {
+        "num": 2,
+        "label": "Controles Carrusel",
+        "side": "top",
+        "box": {
+          "x": 1240,
+          "y": 153,
+          "w": 88,
+          "h": 40
+        }
+      },
+      {
+        "num": 3,
+        "label": "Tarjeta Modalidad (CMS)",
+        "side": "bottom",
+        "box": {
+          "x": 112,
+          "y": 249,
+          "w": 340,
+          "h": 477.5
+        }
+      },
+      {
+        "num": 4,
+        "label": "Etiqueta y Categoría",
+        "side": "top",
+        "box": {
+          "x": 513,
+          "y": 286,
+          "w": 107,
+          "h": 23
+        }
+      },
+      {
+        "num": 5,
+        "label": "Botón Cotizar Envío",
+        "side": "bottom",
+        "box": {
+          "x": 865,
+          "y": 685.5,
+          "w": 101,
+          "h": 16
+        }
+      }
+    ]
+  },
+  "06_contacto": {
+    "img": "06_contacto.png",
+    "width": 1440,
+    "height": 720,
+    "items": [
+      {
+        "num": 1,
+        "label": "Oficina / Google Maps (Pendiente)",
+        "side": "top",
+        "box": {
+          "x": 233,
+          "y": 172,
+          "w": 108.0,
+          "h": 133
+        }
+      },
+      {
+        "num": 2,
+        "label": "Línea Telefónica (Pendiente)",
+        "side": "top",
+        "box": {
+          "x": 473.1,
+          "y": 172,
+          "w": 108.1,
+          "h": 133
+        }
+      },
+      {
+        "num": 3,
+        "label": "Redes Sociales Corporativas",
+        "side": "bottom",
+        "box": {
+          "x": 233,
+          "y": 463,
+          "w": 348.2,
+          "h": 99
+        }
+      },
+      {
+        "num": 4,
+        "label": "Formulario de Contacto Directo",
+        "side": "right",
+        "box": {
+          "x": 662.2,
+          "y": 40,
+          "w": 544.8,
+          "h": 522
+        }
+      }
+    ]
+  },
+  "07_cotizador_modal": {
+    "img": "07_cotizador_modal.png",
+    "width": 1440,
+    "height": 900,
+    "items": [
+      {
+        "num": 1,
+        "label": "Selector Tipo de Servicio",
+        "side": "left",
+        "box": {
+          "x": 417,
+          "y": 225,
+          "w": 606,
+          "h": 42
+        }
+      },
+      {
+        "num": 2,
+        "label": "Origen y Destino del Viaje",
+        "side": "right",
+        "box": {
+          "x": 417,
+          "y": 305,
+          "w": 606,
+          "h": 42
+        }
+      },
+      {
+        "num": 3,
+        "label": "Fecha, Hora y Pasajeros",
+        "side": "left",
+        "box": {
+          "x": 417,
+          "y": 385,
+          "w": 297,
+          "h": 44
+        }
+      },
+      {
+        "num": 4,
+        "label": "Envío Directo a WhatsApp",
+        "side": "bottom",
+        "box": {
+          "x": 417,
+          "y": 765,
+          "w": 606,
+          "h": 50
+        }
+      }
+    ]
+  },
+  "08_admin_login": {
+    "img": "08_admin_login.png",
+    "width": 1440,
+    "height": 900,
+    "items": [
+      {
+        "num": 1,
+        "label": "Retorno al Sitio Web",
+        "side": "top",
+        "box": {
+          "x": 32,
+          "y": 34,
+          "w": 182.6,
+          "h": 16
+        }
+      },
+      {
+        "num": 2,
+        "label": "Logotipo Oficial Portal",
+        "side": "left",
+        "box": {
+          "x": 32,
+          "y": 148.8,
+          "w": 295,
+          "h": 74
+        }
+      },
+      {
+        "num": 3,
+        "label": "Credenciales de Acceso",
+        "side": "left",
+        "box": {
+          "x": 32,
+          "y": 400.8,
+          "w": 295,
+          "h": 122.4
+        }
+      },
+      {
+        "num": 4,
+        "label": "Botón Ingresar al Panel",
+        "side": "left",
+        "box": {
+          "x": 32,
+          "y": 539.2,
+          "w": 295,
+          "h": 42
+        }
+      },
+      {
+        "num": 5,
+        "label": "Acceso Rápido / Autocompletar",
+        "side": "bottom",
+        "box": {
+          "x": 32,
+          "y": 626.2,
+          "w": 295,
+          "h": 103
+        }
+      },
+      {
+        "num": 6,
+        "label": "Escaparate Visual 75%",
+        "side": "right",
+        "box": {
+          "x": 360,
+          "y": 0,
+          "w": 1080,
+          "h": 900
+        }
+      }
+    ]
+  },
+  "09_admin_dashboard": {
+    "img": "09_admin_dashboard.png",
+    "width": 1440,
+    "height": 900,
+    "items": [
+      {
+        "num": 1,
+        "label": "Logo Oficial en Sidebar",
+        "side": "top",
+        "box": {
+          "x": 20,
+          "y": 20,
+          "w": 250,
+          "h": 40
+        }
+      },
+      {
+        "num": 2,
+        "label": "Módulos CMS y Contadores",
+        "side": "bottom",
+        "box": {
+          "x": 14,
+          "y": 128,
+          "w": 291,
+          "h": 390
+        }
+      },
+      {
+        "num": 3,
+        "label": "Agregar Nuevo Elemento",
+        "side": "top",
+        "box": {
+          "x": 1229,
+          "y": 97,
+          "w": 175,
+          "h": 36
+        }
+      },
+      {
+        "num": 4,
+        "label": "Tarjetas Publicadas",
+        "side": "bottom",
+        "box": {
+          "x": 335,
+          "y": 169,
+          "w": 353.3,
+          "h": 376.4
+        }
+      },
+      {
+        "num": 5,
+        "label": "Botón Editar Tarjeta",
+        "side": "bottom",
+        "box": {
+          "x": 941.7,
+          "y": 508.4,
+          "w": 70,
+          "h": 24
+        }
+      },
+      {
+        "num": 6,
+        "label": "Regresar al Sitio Web",
+        "side": "top",
+        "box": {
+          "x": 1193.4,
+          "y": 14,
+          "w": 214.6,
+          "h": 32
+        }
+      }
+    ]
+  },
+  "10_admin_editor": {
+    "img": "10_admin_editor.png",
+    "width": 1440,
+    "height": 900,
+    "items": [
+      {
+        "num": 1,
+        "label": "Col. 1: Textos y Campos",
+        "side": "top",
+        "box": {
+          "x": 335,
+          "y": 130,
+          "w": 353.3,
+          "h": 550
+        }
+      },
+      {
+        "num": 2,
+        "label": "Col. 2: Encuadre WebP",
+        "side": "top",
+        "box": {
+          "x": 724.3,
+          "y": 196,
+          "w": 311.3,
+          "h": 311.3
+        }
+      },
+      {
+        "num": 3,
+        "label": "Barra de Zoom (100%-300%)",
+        "side": "bottom",
+        "box": {
+          "x": 735.3,
+          "y": 460.3,
+          "w": 289.3,
+          "h": 36
+        }
+      },
+      {
+        "num": 4,
+        "label": "Col. 3: Vista Previa 1:1",
+        "side": "top",
+        "box": {
+          "x": 1092.7,
+          "y": 151,
+          "w": 311.3,
+          "h": 448
+        }
+      },
+      {
+        "num": 5,
+        "label": "Guardar en Supabase",
+        "side": "bottom",
+        "box": {
+          "x": 1092.7,
+          "y": 615,
+          "w": 311.3,
+          "h": 44
+        }
+      }
+    ]
+  },
+  "11_admin_perfil": {
+    "img": "11_admin_perfil.png",
+    "width": 1440,
+    "height": 900,
+    "items": [
+      {
+        "num": 1,
+        "label": "Nombre y Apellido / Cargo",
+        "side": "top",
+        "box": {
+          "x": 527.4,
+          "y": 278,
+          "w": 342.6,
+          "h": 42
+        }
+      },
+      {
+        "num": 2,
+        "label": "Correo de Acceso al Panel",
+        "side": "left",
+        "box": {
+          "x": 527.4,
+          "y": 364,
+          "w": 342.6,
+          "h": 42
+        }
+      },
+      {
+        "num": 3,
+        "label": "Cambio de Contraseña Segura",
+        "side": "right",
+        "box": {
+          "x": 890,
+          "y": 364,
+          "w": 342.6,
+          "h": 42
+        }
+      },
+      {
+        "num": 4,
+        "label": "Teléfono / WhatsApp Admin",
+        "side": "left",
+        "box": {
+          "x": 527.4,
+          "y": 450,
+          "w": 705.2,
+          "h": 42
+        }
+      },
+      {
+        "num": 5,
+        "label": "Guardar Cambios de Perfil",
+        "side": "bottom",
+        "box": {
+          "x": 985.6,
+          "y": 693,
+          "w": 247,
+          "h": 40
+        }
+      }
+    ]
+  }
+}
